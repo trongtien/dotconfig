@@ -56,5 +56,11 @@ end, { silent = true, desc = "Right split / tmux pane" })
 map.set("n", "<leader>rr", ":wincmd r<CR>", { silent = true, desc = "Rotate split buffers" })
 map.set("n", "<leader>re", ":restart<CR>", { silent = true, desc = "Restart Neovim" })
 
+-- Resize splits: mỗi lần nhấn thay đổi 5 dòng/cột (mặc định là 1)
+map.set("n", "<C-w>+", "5<C-w>+", { silent = true, desc = "Increase split height +5" })
+map.set("n", "<C-w>-", "5<C-w>-", { silent = true, desc = "Decrease split height -5" })
+map.set("n", "<C-w><", "5<C-w><", { silent = true, desc = "Decrease split width -5" })
+map.set("n", "<C-w>>", "5<C-w>>", { silent = true, desc = "Increase split width +5" })
+
 -- Move selection up and down
 map.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
