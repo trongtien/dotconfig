@@ -1,0 +1,7 @@
+# All shell config lives in ~/.config — see ~/.config/README.md
+
+# mise shims (go, bun, node, typescript) — zero startup cost
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# Starship prompt (~/.config/starship.toml)
+eval "$(starship init bash)"

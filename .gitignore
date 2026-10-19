@@ -1,0 +1,14 @@
+# runtime data (go telemetry — regenerate tự động)
+go/
+
+# tmux plugins — cài qua install.sh / TPM, không cần push
+tmux/plugins/
+
+# editor junk
+*.swp
+*.swo
+*~
+.DS_Store
+
+# logs
+*.log
