@@ -1,6 +1,8 @@
 vim.pack.add({
 	{ src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 	{ src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
+	"https://github.com/supermaven-inc/supermaven-nvim",
+	"https://github.com/tpope/vim-fugitive",
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/rafamadriz/friendly-snippets",
@@ -19,3 +21,5 @@ require("plugins.treesitter")
 require("plugins.formatting")
 require("plugins.oil")
 require("plugins.mini")
+require("plugins.fugitive")
+require("plugins.supermaven")

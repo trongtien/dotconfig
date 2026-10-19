@@ -15,8 +15,8 @@ map.set("n", "<S-h>", ":bprevious<CR>", { silent = true, desc = "Previous buffer
 -- Close currently active buffer
 map.set("n", "<C-c>", ":bwipeout<CR>", { silent = true, desc = "Close current buffer" })
 
--- Paste without replacing paste with what you have highlighted over
-map.set("n", "<leader>p", '"_dP', { desc = "Paste without replacing register" })
+-- Paste khong doi: chuyen sang <leader>P (vi <leader>p da cho Git push)
+map.set("n", "<leader>P", '"_dP', { desc = "Paste without replacing register" })
 
 -- Yank to system clipboard
 map.set("n", "<leader>y", '"+y', { desc = "Yank to system clipboard" })

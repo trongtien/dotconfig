@@ -107,8 +107,8 @@ vim.keymap.set("n", "<leader>sc", function()
 	MiniExtra.pickers.history()
 end, { silent = true })
 
--- Keymaps
-vim.keymap.set("n", "<leader>sk", function()
+-- Keymaps (danh sach tat ca key da config)
+vim.keymap.set("n", "<leader>x", function()
 	MiniExtra.pickers.keymaps()
-end, { silent = true })
+end, { silent = true, desc = "Show all keymaps" })
 
