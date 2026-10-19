@@ -17,5 +17,13 @@ require("catppuccin").setup({
 	end,
 })
 
-vim.cmd("colorscheme catppuccin-mocha")
+-- Active theme: rose-pine moon (same palette as tmux + starship)
+require("rose-pine").setup({
+	styles = { bold = false, italic = false },
+})
+vim.cmd("colorscheme rose-pine-moon")
+vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
 
+-- Switch back to catppuccin: comment the rose-pine block above, then:
+-- vim.cmd("colorscheme catppuccin-mocha")

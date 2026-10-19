@@ -13,7 +13,9 @@ fi
 
 echo "==> pacman: packages"
 $SUDO pacman -S --needed --noconfirm \
-  git curl starship tmux ripgrep tree-sitter-cli neovim foot ttf-jetbrains-mono-nerd
+  git curl starship tmux ripgrep tree-sitter-cli neovim foot ttf-jetbrains-mono-nerd \
+  gopls tailwindcss-language-server typescript-language-server \
+  lua-language-server yaml-language-server
 
 echo "==> mise: version manager (~/.config/mise/config.toml)"
 if [ ! -x "$HOME/.local/bin/mise" ]; then
@@ -22,6 +24,11 @@ fi
 export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
 if [ -f "$HOME/.config/mise/config.toml" ]; then
   mise install
+fi
+
+echo "==> templ (Go templ language server)"
+if ! command -v templ >/dev/null 2>&1; then
+  GOBIN="$HOME/.local/share/mise/shims" go install github.com/a-h/templ/cmd/templ@latest
 fi
 
 echo "==> bash: shims (login -> ~/.config/bash/bashrc)"

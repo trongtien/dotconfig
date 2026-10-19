@@ -3,8 +3,8 @@
 # pass C-q/C-s through (disable tty flow control)
 [ -t 0 ] && stty -ixon 2>/dev/null
 
-# mise shims (go, bun, node, typescript) — zero startup cost
-export PATH="$HOME/.local/share/mise/shims:$PATH"
+# mise shims + go bins — zero startup cost
+export PATH="$HOME/.local/share/mise/shims:$HOME/go/bin:$PATH"
 
 # Starship prompt (~/.config/starship.toml)
 eval "$(starship init bash)"
