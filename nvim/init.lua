@@ -3,6 +3,7 @@ require("plugins")
 require("remap")
 require("clear_noh")
 require("autocmds")
+require("harpoon")
 
 vim.lsp.enable({
 	"html",
