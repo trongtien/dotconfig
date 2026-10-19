@@ -2,6 +2,9 @@ local map = vim.keymap
 
 -- Save and quit current file quicker
 map.set("n", "<leader>w", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
+map.set("n", "<C-s>", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
+
+
 map.set({ "n", "t" }, "<leader>q", ":q<cr>", { silent = true, noremap = true, desc = "Quit current buffer" })
 map.set("n", "<leader>d", "<C-w>d", { remap = true, desc = "Show diagnostic float" })
 
@@ -49,9 +52,9 @@ end, { silent = true, desc = "Above split / tmux pane" })
 map.set("n", "<C-l>", function()
 	navigate_split("l")
 end, { silent = true, desc = "Right split / tmux pane" })
+
 map.set("n", "<leader>rr", ":wincmd r<CR>", { silent = true, desc = "Rotate split buffers" })
 map.set("n", "<leader>re", ":restart<CR>", { silent = true, desc = "Restart Neovim" })
 
 -- Move selection up and down
 map.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
-map.set("v", "<C-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
