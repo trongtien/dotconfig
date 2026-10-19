@@ -7,7 +7,7 @@
 -- 		vim.hl.hl_op({ timeout = 200, on_visual = true })
 -- 	end,
 -- })
-
+--
 
 -- restore cursor to file position in previous editing session
 vim.api.nvim_create_autocmd("BufReadPost", {

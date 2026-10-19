@@ -1,5 +1,8 @@
 # All shell config lives in ~/.config — see ~/.config/README.md
 
+# pass C-q/C-s through (disable tty flow control)
+[ -t 0 ] && stty -ixon 2>/dev/null
+
 # mise shims (go, bun, node, typescript) — zero startup cost
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 

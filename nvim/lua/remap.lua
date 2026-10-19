@@ -2,7 +2,6 @@ local map = vim.keymap
 
 -- Save and quit current file quicker
 map.set("n", "<leader>w", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
-map.set("n", "<C-s>", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
 map.set({ "n", "t" }, "<leader>q", ":q<cr>", { silent = true, noremap = true, desc = "Quit current buffer" })
 map.set("n", "<leader>d", "<C-w>d", { remap = true, desc = "Show diagnostic float" })
 
@@ -13,7 +12,7 @@ map.set("n", "<S-h>", ":bprevious<CR>", { silent = true, desc = "Previous buffer
 -- Close currently active buffer
 map.set("n", "<C-c>", ":bwipeout<CR>", { silent = true, desc = "Close current buffer" })
 
--- Paste without replacing paste with what you are highlighted over
+-- Paste without replacing paste with what you have highlighted over
 map.set("n", "<leader>p", '"_dP', { desc = "Paste without replacing register" })
 
 -- Yank to system clipboard
@@ -30,24 +29,29 @@ map.set({ "n", "v" }, "<leader>", "<nop>", { desc = "Disable leader key default"
 map.set("i", "<C-h>", "<Left>", { desc = "Move cursor left" })
 map.set("i", "<C-l>", "<Right>", { desc = "Move cursor right" })
 
--- Swap between split buffers
-map.set("n", "<C-h>", ":wincmd h<CR>", {
-	silent = true,
-	desc = "Move to left split",
-})
-map.set("n", "<C-j>", ":wincmd j<CR>", { silent = true, desc = "Move to below split" })
-map.set("n", "<C-k>", ":wincmd k<CR>", {
-	silent = true,
-	desc = "Move to above split",
-})
-map.set("n", "<C-l>", ":wincmd l<CR>", { silent = true, desc = "Move to right split" })
+-- Swap between split buffers (cross tmux panes at edge)
+local navigate_split = function(dir)
+	local cur = vim.api.nvim_get_current_win()
+	vim.cmd("wincmd " .. dir)
+	if vim.api.nvim_get_current_win() == cur and vim.env.TMUX ~= nil then
+		vim.fn.system("tmux select-pane -" .. dir)
+	end
+end
+map.set("n", "<C-h>", function()
+	navigate_split("h")
+end, { silent = true, desc = "Left split / tmux pane" })
+map.set("n", "<C-j>", function()
+	navigate_split("j")
+end, { silent = true, desc = "Below split / tmux pane" })
+map.set("n", "<C-k>", function()
+	navigate_split("k")
+end, { silent = true, desc = "Above split / tmux pane" })
+map.set("n", "<C-l>", function()
+	navigate_split("l")
+end, { silent = true, desc = "Right split / tmux pane" })
 map.set("n", "<leader>rr", ":wincmd r<CR>", { silent = true, desc = "Rotate split buffers" })
 map.set("n", "<leader>re", ":restart<CR>", { silent = true, desc = "Restart Neovim" })
 
 -- Move selection up and down
 map.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
 map.set("v", "<C-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
-
-
-
-
