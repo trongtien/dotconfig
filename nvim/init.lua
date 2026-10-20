@@ -4,15 +4,16 @@ require("remap")
 require("clear_noh")
 require("autocmds")
 require("harpoon")
+require("lsp")
 
 vim.lsp.enable({
-	"html",
-	"cssls",
-	"tailwindcss",
-	"gopls",
-	"ts_ls",
-	"templ",
-	"jsonls",
-	"lua_ls",
-	"yamlls",
+  "html",
+  "cssls",
+  "tailwindcss",
+  "gopls",
+  "ts_ls",
+  "templ",
+  "jsonls",
+  "lua_ls",
+  "yamlls",
 })

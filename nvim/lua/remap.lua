@@ -1,5 +1,8 @@
 local map = vim.keymap
 
+
+map.set("n", "<leader>s", ":%s//g<Left><Left>")
+
 -- Save and quit current file quicker
 map.set("n", "<leader>w", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
 map.set("n", "<C-s>", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
@@ -34,23 +37,23 @@ map.set("i", "<C-l>", "<Right>", { desc = "Move cursor right" })
 
 -- Swap between split buffers (cross tmux panes at edge)
 local navigate_split = function(dir)
-	local cur = vim.api.nvim_get_current_win()
-	vim.cmd("wincmd " .. dir)
-	if vim.api.nvim_get_current_win() == cur and vim.env.TMUX ~= nil then
-		vim.fn.system("tmux select-pane -" .. dir)
-	end
+  local cur = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd " .. dir)
+  if vim.api.nvim_get_current_win() == cur and vim.env.TMUX ~= nil then
+    vim.fn.system("tmux select-pane -" .. dir)
+  end
 end
 map.set("n", "<C-h>", function()
-	navigate_split("h")
+  navigate_split("h")
 end, { silent = true, desc = "Left split / tmux pane" })
 map.set("n", "<C-j>", function()
-	navigate_split("j")
+  navigate_split("j")
 end, { silent = true, desc = "Below split / tmux pane" })
 map.set("n", "<C-k>", function()
-	navigate_split("k")
+  navigate_split("k")
 end, { silent = true, desc = "Above split / tmux pane" })
 map.set("n", "<C-l>", function()
-	navigate_split("l")
+  navigate_split("l")
 end, { silent = true, desc = "Right split / tmux pane" })
 
 map.set("n", "<leader>rr", ":wincmd r<CR>", { silent = true, desc = "Rotate split buffers" })
