@@ -101,6 +101,20 @@ local function menu_delete()
   vim.api.nvim_win_set_cursor(menu_win, { math.min(row, #list), 0 })
 end
 
+local function menu_move(dir)
+	local row = vim.api.nvim_win_get_cursor(menu_win)[1]
+	local to = row + dir
+	if to < 1 or to > #list then
+		return
+	end
+	list[row], list[to] = list[to], list[row]
+	save()
+	vim.bo[menu_buf].modifiable = true
+	vim.api.nvim_buf_set_lines(menu_buf, 0, -1, false, menu_lines())
+	vim.bo[menu_buf].modifiable = false
+	vim.api.nvim_win_set_cursor(menu_win, { to, 0 })
+end
+
 local function menu_choose()
   -- Co count (vd 3 + Enter) thi mo slot do, khong thi mo dong dang dung
   local row = vim.v.count
@@ -142,13 +156,19 @@ function M.menu()
     style = "minimal",
   })
 
-  local opts = { buffer = menu_buf, silent = true, nowait = true }
-  vim.keymap.set("n", "<CR>", menu_choose, opts)
-  vim.keymap.set("n", "o", menu_choose, opts)
-  vim.keymap.set("n", "dd", menu_delete, opts)
-  vim.keymap.set("n", "x", menu_delete, opts)
-  vim.keymap.set("n", "q", menu_close, opts)
-  vim.keymap.set("n", "<Esc>", menu_close, opts)
+	local opts = { buffer = menu_buf, silent = true, nowait = true }
+	vim.keymap.set("n", "<CR>", menu_choose, opts)
+	vim.keymap.set("n", "o", menu_choose, opts)
+	vim.keymap.set("n", "dd", menu_delete, opts)
+	vim.keymap.set("n", "x", menu_delete, opts)
+	vim.keymap.set("n", "J", function()
+		menu_move(1)
+	end, opts)
+	vim.keymap.set("n", "K", function()
+		menu_move(-1)
+	end, opts)
+	vim.keymap.set("n", "q", menu_close, opts)
+	vim.keymap.set("n", "<Esc>", menu_close, opts)
 end
 
 load_list()

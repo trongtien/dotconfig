@@ -7,7 +7,6 @@ map.set("n", "<leader>s", ":%s//g<Left><Left>")
 map.set("n", "<leader>w", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
 map.set("n", "<C-s>", ":w<cr>", { silent = true, noremap = true, desc = "Save current file" })
 
-
 map.set({ "n", "t" }, "<leader>q", ":q<cr>", { silent = true, noremap = true, desc = "Quit current buffer" })
 map.set("n", "<leader>d", "<C-w>d", { remap = true, desc = "Show diagnostic float" })
 
