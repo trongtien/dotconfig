@@ -1,6 +1,6 @@
 local map = vim.keymap
 
-
+map.set("n", ";", ":", { nowait = true })
 map.set("n", "<leader>s", ":%s//g<Left><Left>")
 
 -- Save and quit current file quicker
