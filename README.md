@@ -12,7 +12,7 @@ All shell config lives under `~/.config`:
 │   └── plugins/        # TPM + plugins (gitignored)
 ├── tmux-sessionizer/
 │   └── tmux-sessionizer.conf  # search paths + session commands
-├── nvim/               # NvChad v2.5 (lazy.nvim + Mason), same as Windows
+├── nvim/               # ThePrimeagen/init.lua layout: lua/trongtien/{set,remap,lazy/*}
 └── README.md
 ~/.bashrc               # tiny shim -> ~/.config/bash/bashrc
 ~/.bash_profile         # login shells -> ~/.bashrc (WSL needs this)
@@ -55,7 +55,9 @@ tmux new -As main       # tmux with status bar at the bottom
 - tmux-sessionizer: `C-a f` (or `C-f` in nvim) picks a project with fzf; search
   paths and `TS_SESSION_COMMANDS` live in `~/.config/tmux-sessionizer/tmux-sessionizer.conf`;
   `Alt+h` in nvim opens (or jumps to) a shell split, `C-a M-h` a shell in window 69
-- nvim: `~/.config/nvim` (NvChad, copied from Windows `%LOCALAPPDATA%\nvim`)
+- nvim: `~/.config/nvim`, laid out like [ThePrimeagen/init.lua](https://github.com/ThePrimeagen/init.lua)
+  (lazy.nvim, telescope, harpoon2, Mason, trouble, undotree, dap/neotest, rose-pine);
+  oil (`<leader>pv`), the old keymaps and the old blink.cmp + autopairs completion are kept
 
 ## Install mise (manager package)
 ```sh

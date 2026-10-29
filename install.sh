@@ -76,8 +76,8 @@ chmod +x "$HOME/.local/bin/tmux-sessionizer"
 
 echo "==> nvim: NvChad plugins (lazy-lock.json) + Mason tools + treesitter parsers (first time only)"
 if command -v nvim >/dev/null 2>&1; then
-  if [ ! -d "$HOME/.local/share/nvim/lazy/NvChad" ]; then
-    # the first start fails before base46 builds its cache and rewrites lazy-lock.json
+  if [ ! -d "$HOME/.local/share/nvim/lazy/lazy.nvim" ]; then
+    # the first start clones lazy.nvim from its stable branch and rewrites lazy-lock.json
     LOCK="$HOME/.config/nvim/lazy-lock.json"
     LOCK_COPY="$(mktemp)"
     cp "$LOCK" "$LOCK_COPY"
@@ -85,13 +85,13 @@ if command -v nvim >/dev/null 2>&1; then
     cp "$LOCK_COPY" "$LOCK"
     rm -f "$LOCK_COPY"
     nvim --headless '+Lazy! restore' +qa
-    # MasonInstall blocks in headless mode; npm warnings make it exit non-zero
+    # LSP servers (lua/trongtien/lazy/lsp.lua), formatters (conform.lua) and delve (dap.lua);
+    # MasonInstall blocks in headless mode, npm warnings make it exit non-zero
+    nvim --headless "+MasonInstall gopls lua-language-server typescript-language-server pyright clangd \
+html-lsp css-lsp json-lsp yaml-language-server bash-language-server tailwindcss-language-server eslint-lsp \
+gofumpt goimports stylua prettierd delve" +qa || true
     nvim --headless \
-      -c "lua vim.cmd.MasonInstall(require('lazy.core.config').plugins['mason.nvim'].opts.ensure_installed)" \
-      -c qa || true
-    nvim --headless \
-      -c "lua require('lazy').load({ plugins = { 'nvim-treesitter' } })" \
-      -c "lua require('nvim-treesitter').install(require('lazy.core.config').plugins['nvim-treesitter'].opts.ensure_installed):wait(900000)" \
+      -c "lua require('nvim-treesitter').install(require('lazy.core.config').plugins['nvim-treesitter'].opts.parsers):wait(900000)" \
       -c qa
   else
     echo "    plugins already present, skipped"
