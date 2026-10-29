@@ -4,6 +4,9 @@ go/
 # tmux plugins — cài qua install.sh / TPM, không cần push
 tmux/plugins/
 
+# token đăng nhập Copilot — không được push
+github-copilot/
+
 # editor junk
 *.swp
 *.swo

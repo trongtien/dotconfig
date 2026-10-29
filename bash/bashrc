@@ -8,3 +8,6 @@ export PATH="$HOME/.local/share/mise/shims:$HOME/go/bin:$PATH"
 
 # Starship prompt (~/.config/starship.toml)
 eval "$(starship init bash)"
+
+# fzf key bindings + completion (C-r history, C-t files, M-c cd)
+eval "$(fzf --bash)"

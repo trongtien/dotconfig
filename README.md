@@ -8,12 +8,15 @@ All shell config lives under `~/.config`:
 │   └── bashrc          # starship loader (sourced by ~/.bashrc shim)
 ├── starship.toml       # prompt: → dir git:(branch), plain & fast
 ├── tmux/
-│   └── tmux.conf       # prefix C-a, rose-pine theme, status bar top
-├── foot/               # terminal font config
-├── nvim/               # editor config
+│   ├── tmux.conf       # prefix C-a, rose-pine theme, status bar bottom
+│   └── plugins/        # TPM + plugins (gitignored)
+├── tmux-sessionizer/
+│   └── tmux-sessionizer.conf  # search paths + session commands
+├── nvim/               # NvChad v2.5 (lazy.nvim + Mason), same as Windows
 └── README.md
 ~/.bashrc               # tiny shim -> ~/.config/bash/bashrc
 ~/.bash_profile         # login shells -> ~/.bashrc (WSL needs this)
+~/.local/bin/tmux-sessionizer  # ThePrimeagen/tmux-sessionizer @7edf821 (install.sh)
 ```
 
 
@@ -22,7 +25,7 @@ All shell config lives under `~/.config`:
 ### 1. Packages (Arch)
 
 ```sh
-sudo pacman -S --needed starship tmux foot git
+sudo pacman -S --needed starship tmux fzf git
 ```
 
 ### 2. Apply configs
@@ -41,7 +44,7 @@ Reload: open a new tab (or `source ~/.bashrc`).
 ```sh
 starship --version      # prompt binary
 starship prompt         # renders: → <dir> git:(branch)
-tmux -vv new -As main   # tmux with status bar on top
+tmux new -As main       # tmux with status bar at the bottom
 ```
 
 ## Customize
@@ -49,6 +52,10 @@ tmux -vv new -As main   # tmux with status bar on top
 - Prompt: `~/.config/starship.toml` (scan_timeout=5, plain text — keep it minimal for speed)
 - Shell load order: `~/.config/bash/bashrc`
 - tmux: `~/.config/tmux/tmux.conf` (TPM plugins + rose-pine theme)
+- tmux-sessionizer: `C-a f` (or `C-f` in nvim) picks a project with fzf; search
+  paths and `TS_SESSION_COMMANDS` live in `~/.config/tmux-sessionizer/tmux-sessionizer.conf`;
+  `Alt+h` in nvim opens (or jumps to) a shell split, `C-a M-h` a shell in window 69
+- nvim: `~/.config/nvim` (NvChad, copied from Windows `%LOCALAPPDATA%\nvim`)
 
 ## Install mise (manager package)
 ```sh
@@ -88,6 +95,7 @@ One-shot setup on a fresh Arch WSL:
 ~/.config/install.sh
 ```
 
-Installs (idempotent, safe to re-run): pacman packages (starship, tmux,
-ripgrep, tree-sitter-cli, neovim, foot, nerd font), mise + tools from
-`~/.config/mise/config.toml`, bash shims, TPM + tmux plugins, nvim bootstrap.
+Installs (idempotent, safe to re-run): pacman packages (starship, tmux, fzf,
+ripgrep, tree-sitter-cli, neovim), mise + tools from
+`~/.config/mise/config.toml`, bash shims, TPM + tmux plugins,
+tmux-sessionizer, nvim plugins (`lazy-lock.json`) + Mason tools.

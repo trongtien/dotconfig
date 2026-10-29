@@ -13,9 +13,7 @@ fi
 
 echo "==> pacman: packages"
 $SUDO pacman -S --needed --noconfirm \
-  git curl starship tmux ripgrep tree-sitter-cli neovim foot ttf-jetbrains-mono-nerd \
-  gopls tailwindcss-language-server typescript-language-server \
-  lua-language-server yaml-language-server
+  git curl unzip starship tmux fzf ripgrep tree-sitter-cli neovim
 
 echo "==> mise: version manager (~/.config/mise/config.toml)"
 if [ ! -x "$HOME/.local/bin/mise" ]; then
@@ -54,7 +52,7 @@ for p in tpm tmux; do
     rm -rf "$PLUGIN_DIR/$p"
   fi
 done
-TPM="$HOME/.tmux/plugins/tpm"
+TPM="$PLUGIN_DIR/tpm"
 if [ ! -d "$TPM" ]; then
   git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM"
 fi
@@ -69,11 +67,32 @@ if [ "$CREATED" -eq 1 ]; then
   tmux kill-session -t _tpm_install 2>/dev/null || true
 fi
 
-echo "==> nvim: bootstrap plugins + parsers (first time only)"
+echo "==> tmux-sessionizer (ThePrimeagen/tmux-sessionizer, pinned commit)"
+TS_COMMIT="7edf8211e36368c29ffc0d2c6d5d2d350b4d729b"
+mkdir -p "$HOME/.local/bin"
+curl -fsSL "https://raw.githubusercontent.com/ThePrimeagen/tmux-sessionizer/$TS_COMMIT/tmux-sessionizer" \
+  -o "$HOME/.local/bin/tmux-sessionizer"
+chmod +x "$HOME/.local/bin/tmux-sessionizer"
+
+echo "==> nvim: NvChad plugins (lazy-lock.json) + Mason tools + treesitter parsers (first time only)"
 if command -v nvim >/dev/null 2>&1; then
-  if [ ! -d "$HOME/.local/share/nvim/site/pack/core/opt" ] \
-     || [ -z "$(ls -A "$HOME/.local/share/nvim/site/pack/core/opt" 2>/dev/null)" ]; then
-    nvim --headless -c 'sleep 60000' -c 'qa!' || true
+  if [ ! -d "$HOME/.local/share/nvim/lazy/NvChad" ]; then
+    # the first start fails before base46 builds its cache and rewrites lazy-lock.json
+    LOCK="$HOME/.config/nvim/lazy-lock.json"
+    LOCK_COPY="$(mktemp)"
+    cp "$LOCK" "$LOCK_COPY"
+    nvim --headless +qa || true
+    cp "$LOCK_COPY" "$LOCK"
+    rm -f "$LOCK_COPY"
+    nvim --headless '+Lazy! restore' +qa
+    # MasonInstall blocks in headless mode; npm warnings make it exit non-zero
+    nvim --headless \
+      -c "lua vim.cmd.MasonInstall(require('lazy.core.config').plugins['mason.nvim'].opts.ensure_installed)" \
+      -c qa || true
+    nvim --headless \
+      -c "lua require('lazy').load({ plugins = { 'nvim-treesitter' } })" \
+      -c "lua require('nvim-treesitter').install(require('lazy.core.config').plugins['nvim-treesitter'].opts.ensure_installed):wait(900000)" \
+      -c qa
   else
     echo "    plugins already present, skipped"
   fi
