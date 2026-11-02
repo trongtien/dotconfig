@@ -6,7 +6,10 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   config = function()
-    require("go").setup()
+    -- go.nvim turns inlay hints on for every buffer by default; :GoToggleInlay still shows them
+    require("go").setup {
+      lsp_inlay_hints = { enable = false },
+    }
   end,
   event = { "CmdlineEnter" },
   ft = { "go", "gomod" },
