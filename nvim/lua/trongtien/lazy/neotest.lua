@@ -6,6 +6,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     "fredrikaverpil/neotest-golang",
     "leoluz/nvim-dap-go",
+    "nvim-neotest/neotest-python",
   },
   config = function()
     require("neotest").setup {
@@ -13,6 +14,7 @@ return {
         require "neotest-golang" {
           testify_enabled = true,
         },
+        require "neotest-python" {},
       },
     }
 

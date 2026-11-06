@@ -21,7 +21,7 @@ return {
         yaml = { "prettierd" },
         markdown = { "prettierd" },
         go = { "goimports", "gofumpt" },
-        python = { "black" },
+        python = { "ruff_organize_imports", "ruff_format" },
       },
     }
 

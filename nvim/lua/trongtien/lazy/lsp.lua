@@ -3,6 +3,7 @@ local servers = {
   "lua_ls", -- Lua
   "ts_ls", -- TypeScript/JavaScript/TSX
   "pyright", -- Python
+  "ruff", -- Python lint/format
   "clangd", -- C/C++
   "html",
   "cssls",
@@ -167,6 +168,24 @@ return {
         typescript = { inlayHints = ts_inlay_hints },
         javascript = { inlayHints = ts_inlay_hints },
       },
+    })
+
+    vim.lsp.config("pyright", {
+      settings = {
+        pyright = { disableOrganizeImports = true },
+      },
+      before_init = function(_, config)
+        local venv_python = vim.fs.joinpath(config.root_dir or vim.fn.getcwd(), ".venv", "bin", "python")
+        if vim.uv.fs_stat(venv_python) then
+          config.settings.python.pythonPath = venv_python
+        end
+      end,
+    })
+
+    vim.lsp.config("ruff", {
+      on_attach = function(client)
+        client.server_capabilities.hoverProvider = false
+      end,
     })
 
     require("fidget").setup {}

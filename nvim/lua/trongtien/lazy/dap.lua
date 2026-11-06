@@ -158,6 +158,7 @@ return {
       require("mason-nvim-dap").setup {
         ensure_installed = {
           "delve",
+          "python",
         },
         automatic_installation = true,
         handlers = {
@@ -185,6 +186,15 @@ return {
               program = "${file}",
               outputMode = "remote",
             })
+            require("mason-nvim-dap").default_setup(config)
+          end,
+          python = function(config)
+            for _, configuration in ipairs(config.configurations) do
+              configuration.pythonPath = function()
+                local venv_python = vim.fs.joinpath(vim.fn.getcwd(), ".venv", "bin", "python")
+                return vim.uv.fs_stat(venv_python) and venv_python or vim.fn.exepath "python3"
+              end
+            end
             require("mason-nvim-dap").default_setup(config)
           end,
         },
