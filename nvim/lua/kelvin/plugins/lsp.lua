@@ -22,6 +22,22 @@ vim.lsp.config("*", {
     capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
+-- Pyright không tự tìm virtualenv của project -> dùng python hệ thống và báo lỗi import.
+-- Trỏ pythonPath vào .venv/venv trong root (thư mục chứa pyproject.toml), nếu có.
+vim.lsp.config("pyright", {
+    before_init = function(_, config)
+        if not config.root_dir then return end
+        for _, dir in ipairs({ ".venv", "venv", "env" }) do
+            local python = vim.fs.joinpath(config.root_dir, dir, "bin", "python")
+            if vim.uv.fs_stat(python) then
+                config.settings.python = config.settings.python or {}
+                config.settings.python.pythonPath = python
+                return
+            end
+        end
+    end,
+})
+
 -- Server được cài qua Mason và tự bật (vim.lsp.enable)
 require("mason-lspconfig").setup({
     ensure_installed = { "lua_ls", "gopls", "ts_ls", "pyright", "bashls" },
