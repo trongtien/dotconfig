@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Chụp màn hình bằng scrot → ~/Pictures/Screenshots + copy vào clipboard.
+#   screenshot            mở menu rofi để chọn kiểu chụp
+#   screenshot <kiểu>     chụp luôn: region | full | window | delay
+set -u
+
+DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$DIR"
+FILE="$DIR/$(date +%F_%H-%M-%S).png"
+
+shoot() {
+    if scrot "$@" "$FILE"; then
+        xclip -selection clipboard -t image/png -i "$FILE"
+        notify-send -i "$FILE" "Đã chụp màn hình" "$(basename "$FILE") (đã copy vào clipboard)"
+    fi
+}
+
+mode="${1:-}"
+if [[ -z "$mode" ]]; then
+    choice=$(printf '%s\n' \
+        "Chọn vùng" \
+        "Toàn màn hình" \
+        "Cửa sổ đang chọn" \
+        "Toàn màn hình sau 3 giây" \
+        "Mở thư mục ảnh" |
+        rofi -dmenu -i -p "Chụp màn hình") || exit 0
+    case "$choice" in
+        "Chọn vùng")                mode=region ;;
+        "Toàn màn hình")            mode=full ;;
+        "Cửa sổ đang chọn")         mode=window ;;
+        "Toàn màn hình sau 3 giây") mode=delay ;;
+        "Mở thư mục ảnh")           exec xdg-open "$DIR" ;;
+        *) exit 0 ;;
+    esac
+    sleep 0.3   # đợi rofi đóng hẳn để không lọt vào ảnh
+fi
+
+case "$mode" in
+    region) shoot -s -f ;;
+    full)   shoot ;;
+    window) shoot -u ;;
+    delay)  shoot -d 3 -c ;;
+    *) echo "Dùng: screenshot [region|full|window|delay]" >&2; exit 1 ;;
+esac

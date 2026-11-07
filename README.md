@@ -21,7 +21,8 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 ├── brave-flags.conf, mimeapps.list
 ├── home/                   # file nằm ngoài ~/.config → install.sh symlink về $HOME
 │   ├── .zshrc .zsh_profile .xprofile
-│   └── .local/scripts/{tmux-sessionizer,monitor-setup}
+│   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
+│   └── .local/share/applications/screenshot.desktop   # mục "Chụp màn hình" trong rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
 └── install.sh
 ```
@@ -209,6 +210,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | Font | `ttf-jetbrains-mono-nerd` | Font có icon cho kitty, i3, neo-tree |
 | Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber` | |
 | Mạng, độ sáng | `networkmanager network-manager-applet iwd brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |
+| Chụp màn hình | `scrot libnotify` | Script `screenshot`, thông báo sau khi chụp |
 | Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey` | |
 | File | `thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller` | Quản lý file, ảnh thu nhỏ, giải nén |
 | Keyring | `gnome-keyring libsecret` | Lưu token GitHub mã hoá |
@@ -230,6 +232,7 @@ Khi vào i3:
 - `~/.xprofile` đặt biến môi trường cho fcitx5.
 - i3 tự chạy: `nm-applet`, `dunst`, `fcitx5`, `xss-lock`, script `monitor-setup`, và mở kitty ở workspace 1.
 - `monitor-setup`: có màn **HDMI-1** thì chỉ dùng màn ngoài 1920x1080, không có thì dùng màn laptop (độ sáng 100%). Bấm `Super+p` để chạy lại khi cắm/rút màn. Tên cổng khác thì sửa `INTERNAL`/`EXTERNAL` trong `home/.local/scripts/monitor-setup` (xem tên bằng `xrandr`).
+- `screenshot`: chụp bằng `scrot`, lưu `~/Pictures/Screenshots/<ngày_giờ>.png` và copy vào clipboard. Gọi không tham số → menu rofi; hoặc `screenshot region|full|window|delay`. Cũng có mục **Chụp màn hình** trong `Super+r`.
 - `xset s off -dpms`: không tự làm tối/tắt màn hình khi để yên.
 - Shell: `~/.zshrc` → Oh My Zsh → `~/.zsh_profile` → `~/.config/personal/*` (alias, PATH), phím fzf, `Ctrl-f` mở tmux-sessionizer.
 
@@ -297,6 +300,9 @@ git config --global user.email "email@example.com"
 | `Super+s` / `Super+Shift+s` | Hiện / cất vào scratchpad |
 | `Super+Shift+r` | Chế độ resize (mũi tên, `Esc` để thoát) |
 | `Super+p` | Chạy lại cấu hình màn hình |
+| `Print` | Menu chụp màn hình (vùng / toàn màn hình / cửa sổ / hẹn 3 giây / mở thư mục) |
+| `Shift+Print` | Chụp vùng chọn bằng chuột |
+| `Super+Print` | Chụp cửa sổ đang focus |
 | `Super+Escape` | Khoá màn hình |
 | `Super+w` | Khởi động lại i3 |
 | `Super+Shift+c` | Nạp lại config i3 |

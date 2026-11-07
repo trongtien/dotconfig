@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Chụp màn hình
+GenericName=Screenshot
+Comment=Chụp vùng / toàn màn hình / cửa sổ bằng scrot
+Exec=sh -c "\\$HOME/.local/scripts/screenshot"
+Icon=applets-screenshooter
+Terminal=false
+Categories=Utility;
+Keywords=screenshot;scrot;chup;anh;

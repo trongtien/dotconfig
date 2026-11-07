@@ -24,6 +24,8 @@ PACMAN_PKGS=(
     pipewire pipewire-audio pipewire-pulse wireplumber
     # Mạng, độ sáng
     networkmanager network-manager-applet iwd brightnessctl
+    # Chụp màn hình (script ~/.local/scripts/screenshot), thông báo
+    scrot libnotify
     # Gõ tiếng Việt
     fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey
     # Quản lý file
@@ -110,6 +112,9 @@ for f in "$DOT"/home/.local/scripts/*; do
     link ".local/scripts/$(basename "$f")"
 done
 run chmod +x "$DOT"/home/.local/scripts/*
+for f in "$DOT"/home/.local/share/applications/*.desktop; do
+    link ".local/share/applications/$(basename "$f")"
+done
 
 # Touchpad: chạm để click
 if ! cmp -s "$DOT/etc/X11/xorg.conf.d/30-touchpad.conf" /etc/X11/xorg.conf.d/30-touchpad.conf; then

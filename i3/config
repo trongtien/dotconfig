@@ -194,3 +194,14 @@ bindsym $mod+p exec --no-startup-id ~/.local/scripts/monitor-setup
 #  nhảy về workspace của cửa sổ cũ. Kéo nó về workspace đang đứng.
 # ---------------------------------------------------------------------
 for_window [class="(?i)brave-browser"] move container to workspace current, focus
+
+# ---------------------------------------------------------------------
+#  Chụp màn hình: script ~/.local/scripts/screenshot (scrot)
+#  Lưu vào ~/Pictures/Screenshots, đồng thời copy vào clipboard
+#  Print           = menu rofi chọn kiểu chụp
+#  Shift+Print     = kéo chuột chọn vùng
+#  $mod+Print      = cửa sổ đang focus
+# ---------------------------------------------------------------------
+bindsym Print exec --no-startup-id ~/.local/scripts/screenshot
+bindsym --release Shift+Print exec --no-startup-id ~/.local/scripts/screenshot region
+bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot window
