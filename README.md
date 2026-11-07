@@ -22,7 +22,7 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 ├── home/                   # file nằm ngoài ~/.config → install.sh symlink về $HOME
 │   ├── .zshrc .zsh_profile .xprofile
 │   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
-│   └── .local/share/applications/screenshot.desktop   # mục "Chụp màn hình" trong rofi
+│   └── .local/share/applications/screenshot.desktop   # mục "Screenshot" trong rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
 └── install.sh
 ```
@@ -232,7 +232,7 @@ Khi vào i3:
 - `~/.xprofile` đặt biến môi trường cho fcitx5.
 - i3 tự chạy: `nm-applet`, `dunst`, `fcitx5`, `xss-lock`, script `monitor-setup`, và mở kitty ở workspace 1.
 - `monitor-setup`: có màn **HDMI-1** thì chỉ dùng màn ngoài 1920x1080, không có thì dùng màn laptop (độ sáng 100%). Bấm `Super+p` để chạy lại khi cắm/rút màn. Tên cổng khác thì sửa `INTERNAL`/`EXTERNAL` trong `home/.local/scripts/monitor-setup` (xem tên bằng `xrandr`).
-- `screenshot`: chụp bằng `scrot`, lưu `~/Pictures/Screenshots/<ngày_giờ>.png` và copy vào clipboard. Gọi không tham số → menu rofi; hoặc `screenshot region|full|window|delay`. Cũng có mục **Chụp màn hình** trong `Super+r`.
+- `screenshot`: chụp bằng `scrot`, lưu `~/Pictures/Screenshots/<ngày_giờ>.png` và copy vào clipboard. Gọi không tham số → menu rofi; hoặc `screenshot region|full|window|delay`. Cũng có mục **Screenshot** trong `Super+r`.
 - `xset s off -dpms`: không tự làm tối/tắt màn hình khi để yên.
 - Shell: `~/.zshrc` → Oh My Zsh → `~/.zsh_profile` → `~/.config/personal/*` (alias, PATH), phím fzf, `Ctrl-f` mở tmux-sessionizer.
 
@@ -300,7 +300,7 @@ git config --global user.email "email@example.com"
 | `Super+s` / `Super+Shift+s` | Hiện / cất vào scratchpad |
 | `Super+Shift+r` | Chế độ resize (mũi tên, `Esc` để thoát) |
 | `Super+p` | Chạy lại cấu hình màn hình |
-| `Print` | Menu chụp màn hình (vùng / toàn màn hình / cửa sổ / hẹn 3 giây / mở thư mục) |
+| `Print` | Menu chụp màn hình (Region / Full screen / Active window / Full screen in 3s / Open folder) |
 | `Shift+Print` | Chụp vùng chọn bằng chuột |
 | `Super+Print` | Chụp cửa sổ đang focus |
 | `Super+Escape` | Khoá màn hình |

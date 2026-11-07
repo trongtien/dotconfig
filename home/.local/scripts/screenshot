@@ -11,25 +11,25 @@ FILE="$DIR/$(date +%F_%H-%M-%S).png"
 shoot() {
     if scrot "$@" "$FILE"; then
         xclip -selection clipboard -t image/png -i "$FILE"
-        notify-send -i "$FILE" "Đã chụp màn hình" "$(basename "$FILE") (đã copy vào clipboard)"
+        notify-send -i "$FILE" "Screenshot taken" "$(basename "$FILE") (copied to clipboard)"
     fi
 }
 
 mode="${1:-}"
 if [[ -z "$mode" ]]; then
     choice=$(printf '%s\n' \
-        "Chọn vùng" \
-        "Toàn màn hình" \
-        "Cửa sổ đang chọn" \
-        "Toàn màn hình sau 3 giây" \
-        "Mở thư mục ảnh" |
-        rofi -dmenu -i -p "Chụp màn hình") || exit 0
+        "Region" \
+        "Full screen" \
+        "Active window" \
+        "Full screen in 3s" \
+        "Open folder" |
+        rofi -dmenu -i -p "Screenshot") || exit 0
     case "$choice" in
-        "Chọn vùng")                mode=region ;;
-        "Toàn màn hình")            mode=full ;;
-        "Cửa sổ đang chọn")         mode=window ;;
-        "Toàn màn hình sau 3 giây") mode=delay ;;
-        "Mở thư mục ảnh")           exec xdg-open "$DIR" ;;
+        "Region")            mode=region ;;
+        "Full screen")       mode=full ;;
+        "Active window")     mode=window ;;
+        "Full screen in 3s") mode=delay ;;
+        "Open folder")       exec xdg-open "$DIR" ;;
         *) exit 0 ;;
     esac
     sleep 0.3   # đợi rofi đóng hẳn để không lọt vào ảnh
