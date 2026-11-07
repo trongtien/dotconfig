@@ -38,6 +38,7 @@ vim.pack.add({
     gh("MunifTanjim/nui.nvim"),
     gh("nvim-tree/nvim-web-devicons"),
     { src = gh("nvim-neo-tree/neo-tree.nvim"), version = "v3.x" },
+    gh("mg979/vim-visual-multi"), -- multi cursor
 }, { confirm = false }) -- tự cài plugin còn thiếu, không hỏi
 
 require("kelvin.plugins.colors")
@@ -47,3 +48,4 @@ require("kelvin.plugins.harpoon")
 require("kelvin.plugins.misc")
 require("kelvin.plugins.lsp")
 require("kelvin.plugins.neotree")
+require("kelvin.plugins.multicursor")
