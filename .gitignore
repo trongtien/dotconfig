@@ -1,17 +1,33 @@
-# runtime data (go telemetry — regenerate tự động)
-go/
+# Whitelist: bỏ qua tất cả, chỉ đưa lên những gì liệt kê bên dưới.
+# (~/.config chứa cả dữ liệu trình duyệt, cookie, cache… không được đưa lên)
+/*
 
-# tmux plugins — cài qua install.sh / TPM, không cần push
-tmux/plugins/
+!/.gitignore
+!/README.md
+!/install.sh
 
-# token đăng nhập Copilot — không được push
-github-copilot/
+# File ngoài ~/.config (install.sh symlink về $HOME / copy vào /etc)
+!/home/
+!/etc/
 
-# editor junk
-*.swp
-*.swo
-*~
-.DS_Store
+# Ứng dụng
+!/nvim/
+!/kitty/
+!/tmux/
+!/i3/
+!/i3status/
+!/hypr/
+!/waybar/
+!/wofi/
+!/fcitx5/
+!/Thunar/
+!/xfce4/
+!/personal/
+!/brave-flags.conf
+!/mimeapps.list
 
-# logs
-*.log
+# Rác / backup / cache bên trong các thư mục trên
+*.bak
+*.bak-*
+/personal/nvim-lazy-backup/
+/fcitx5/conf/cached_layouts

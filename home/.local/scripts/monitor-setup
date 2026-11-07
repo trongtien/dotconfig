@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Có HDMI-1 -> chỉ dùng màn phụ, tắt màn laptop. Không có -> dùng màn laptop.
+INTERNAL=eDP-1
+EXTERNAL=HDMI-1
+
+if xrandr --query | grep -q "^$EXTERNAL connected"; then
+    xrandr --output "$EXTERNAL" --primary --mode 1920x1080 --rate 60 \
+           --output "$INTERNAL" --off
+    xrandr --output "$EXTERNAL" --brightness 1.0
+else
+    xrandr --output "$INTERNAL" --primary --auto \
+           --output "$EXTERNAL" --off
+    xrandr --output "$INTERNAL" --brightness 1.0
+    brightnessctl -q set 100%   # đèn nền màn laptop luôn sáng nhất
+fi

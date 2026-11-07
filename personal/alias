@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+alias vim="$VIM"
+alias python="python3"
+alias pjson="python -mjson.tool"
+alias xsc="xclip -selection clipboard"
+alias cclip="xclip -selection clipboard"
+alias my_ip="ip address | grep -o \"inet 192.*/\" | awk '{ print \$2 }' | tr / ' ' | xargs"
+alias killBT="rfkill block bluetooth"
+alias unKillBT="rfkill unblock bluetooth"
+alias ezrc="$VIM ~/.zshrc"
+alias ebp="$VIM ~/.zsh_profile"
+alias eirc="$VIM $XDG_CONFIG_HOME/i3/config"

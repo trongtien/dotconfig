@@ -1,0 +1,196 @@
+# =====================================================================
+#  i3 config — nhẹ, phím tắt giống Hyprland (~/.config/hypr/hyprland.lua)
+#  Phím chính ($mod) = phím Windows (Super)
+#  Tài liệu: https://i3wm.org/docs/userguide.html
+# =====================================================================
+
+set $mod Mod4
+
+# ---------------------------------------------------------------------
+#  Ứng dụng
+# ---------------------------------------------------------------------
+set $terminal kitty
+set $fileManager thunar
+set $menu rofi -show drun
+
+font pango:JetBrainsMono Nerd Font 10
+
+# ---------------------------------------------------------------------
+#  Giao diện: không gaps, viền mỏng
+# ---------------------------------------------------------------------
+# Viền 1px để thấy cửa sổ nào đang focus và để kéo chuột đổi kích thước.
+# Đổi thành "pixel 0" nếu muốn bỏ hẳn viền.
+default_border pixel 1
+default_floating_border pixel 1
+# Ẩn viền khi workspace chỉ có 1 cửa sổ
+hide_edge_borders smart
+
+gaps inner 0
+gaps outer 0
+
+#                       viền      nền       chữ       indicator child_border
+client.focused          #33ccff   #33ccff   #000000   #00ff99   #33ccff
+client.focused_inactive #595959   #595959   #ffffff   #595959   #595959
+client.unfocused        #222222   #222222   #888888   #222222   #222222
+client.urgent           #ff5555   #ff5555   #ffffff   #ff5555   #ff5555
+
+focus_follows_mouse yes
+
+# ---------------------------------------------------------------------
+#  Tự khởi động
+# ---------------------------------------------------------------------
+exec --no-startup-id dex --autostart --environment i3
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -c 000000
+exec --no-startup-id nm-applet
+exec --no-startup-id dunst
+exec --no-startup-id fcitx5 -d --replace
+# Đợi fcitx5 sẵn sàng rồi mới mở terminal (kitty chỉ kết nối IME lúc khởi động)
+exec --no-startup-id sh -c 'for i in $(seq 50); do fcitx5-remote >/dev/null 2>&1 && break; sleep 0.1; done; sleep 0.5; i3-msg "workspace number $ws1; exec $terminal"'
+
+# ---------------------------------------------------------------------
+#  Phím cơ bản (giống Hyprland)
+# ---------------------------------------------------------------------
+bindsym $mod+q exec $terminal
+bindsym $mod+c kill
+bindsym $mod+m exec --no-startup-id i3-msg exit
+bindsym $mod+e exec $fileManager
+bindsym $mod+v floating toggle
+bindsym $mod+r exec --no-startup-id $menu
+# Đổi hướng chia (ngang <-> dọc), tương đương togglesplit
+bindsym $mod+j layout toggle split
+# Khởi động lại i3 + thanh trạng thái (thay cho "restart waybar"), giữ nguyên cửa sổ
+bindsym $mod+w restart
+
+# ---------------------------------------------------------------------
+#  Chuột
+# ---------------------------------------------------------------------
+# $mod + chuột trái kéo = di chuyển, $mod + chuột phải kéo = đổi kích thước (cửa sổ floating)
+floating_modifier $mod
+# $mod + chuột trái kéo cửa sổ tiling sang vị trí khác
+tiling_drag modifier titlebar
+# $mod + cuộn chuột = chuyển workspace
+bindsym --whole-window $mod+button5 workspace next_on_output
+bindsym --whole-window $mod+button4 workspace prev_on_output
+
+# ---------------------------------------------------------------------
+#  Focus bằng phím mũi tên
+# ---------------------------------------------------------------------
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# (thêm) Di chuyển cửa sổ: $mod + Shift + mũi tên
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# ---------------------------------------------------------------------
+#  Workspace 1–10
+# ---------------------------------------------------------------------
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Scratchpad (thay cho special workspace "magic" của Hyprland)
+bindsym $mod+s scratchpad show
+bindsym $mod+Shift+s move scratchpad
+
+# ---------------------------------------------------------------------
+#  Phím bổ sung của i3 (không trùng phím Hyprland)
+# ---------------------------------------------------------------------
+bindsym $mod+f fullscreen toggle
+bindsym $mod+t layout toggle tabbed split
+bindsym $mod+Shift+c reload
+bindsym $mod+Escape exec --no-startup-id i3lock -c 000000
+
+# Resize mode: $mod+Shift+r rồi dùng phím mũi tên, Enter/Esc để thoát
+mode "resize" {
+        bindsym Left resize shrink width 10 px or 5 ppt
+        bindsym Down resize grow height 10 px or 5 ppt
+        bindsym Up resize shrink height 10 px or 5 ppt
+        bindsym Right resize grow width 10 px or 5 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+Shift+r mode "default"
+}
+bindsym $mod+Shift+r mode "resize"
+
+# ---------------------------------------------------------------------
+#  Phím media: âm lượng, độ sáng, nhạc
+# ---------------------------------------------------------------------
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute        exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute     exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym XF86MonBrightnessUp   exec --no-startup-id brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86AudioNext  exec --no-startup-id playerctl next
+bindsym XF86AudioPlay  exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPrev  exec --no-startup-id playerctl previous
+
+# ---------------------------------------------------------------------
+#  Thanh trạng thái (i3bar + i3status — rất nhẹ)
+# ---------------------------------------------------------------------
+bar {
+        status_command i3status
+        position top
+        tray_output primary
+        colors {
+                background #1e1e1e
+                statusline #dddddd
+                separator  #555555
+                focused_workspace  #33ccff #33ccff #000000
+                active_workspace   #595959 #595959 #ffffff
+                inactive_workspace #1e1e1e #1e1e1e #888888
+                urgent_workspace   #ff5555 #ff5555 #ffffff
+        }
+}
+
+# ---------------------------------------------------------------------
+#  Màn hình: có HDMI thì chỉ dùng màn phụ (script ~/.local/scripts/monitor-setup)
+# ---------------------------------------------------------------------
+exec_always --no-startup-id ~/.local/scripts/monitor-setup
+
+# Không cho X tự làm tối/tắt màn hình khi để yên (screensaver + DPMS mặc định 10 phút).
+# Cần gói xorg-xset. Màn hình vẫn khoá khi suspend (xss-lock), khoá tay: $mod+Escape
+exec_always --no-startup-id xset s off s noblank -dpms
+bindsym $mod+p exec --no-startup-id ~/.local/scripts/monitor-setup
+
+# ---------------------------------------------------------------------
+#  Brave/Chromium tự đặt _NET_WM_DESKTOP theo cửa sổ cũ → cửa sổ mới
+#  nhảy về workspace của cửa sổ cũ. Kéo nó về workspace đang đứng.
+# ---------------------------------------------------------------------
+for_window [class="(?i)brave-browser"] move container to workspace current, focus

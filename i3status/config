@@ -1,0 +1,50 @@
+# i3status — thanh trạng thái nhẹ cho i3bar
+general {
+        colors = true
+        interval = 5
+}
+
+order += "wireless _first_"
+# order += "battery all"  # tắt: pin không báo dung lượng (sysfs BAT0 trống)
+order += "cpu_usage"
+order += "memory"
+order += "volume master"
+order += "tztime local"
+
+wireless _first_ {
+        format_up = "W: %essid %quality"
+        format_down = "W: down"
+}
+
+ethernet _first_ {
+        format_up = "E: %ip"
+        format_down = ""
+}
+
+battery all {
+        format = "%status %percentage %remaining"
+        status_chr = "CHR"
+        status_bat = "BAT"
+        status_full = "FULL"
+        low_threshold = 15
+}
+
+cpu_usage {
+        format = "CPU %usage"
+}
+
+memory {
+        format = "RAM %used"
+        threshold_degraded = "1G"
+        format_degraded = "RAM < %available"
+}
+
+volume master {
+        format = "VOL %volume"
+        format_muted = "VOL muted"
+        device = "pulse"
+}
+
+tztime local {
+        format = "%d/%m %H:%M"
+}
