@@ -326,6 +326,8 @@ git config --global user.email "email@example.com"
 | `prefix ^` | Về window trước |
 | `prefix f` hoặc `Ctrl-f` (ở zsh) | tmux-sessionizer: chọn project bằng fzf |
 | `prefix r` | Nạp lại config |
+| `prefix R` hoặc `prefix ,` | Đổi tên window |
+| `prefix $` | Đổi tên session |
 | `prefix [` rồi `v` … `y` | Copy kiểu vim vào clipboard |
 
 ### Neovim (`<leader>` = `Space`)
