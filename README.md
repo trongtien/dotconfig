@@ -33,15 +33,13 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 1. [Boot USB Arch và kết nối Wi-Fi (không cần cài gì)](#1-boot-usb-arch-và-kết-nối-wi-fi-không-cần-cài-gì)
 2. [Cài Arch Linux](#2-cài-arch-linux)
 3. [Lần đầu khởi động: Wi-Fi + user](#3-lần-đầu-khởi-động-wi-fi--user)
-4. [Cài package](#4-cài-package)
-5. [Lấy dotfiles này về](#5-lấy-dotfiles-này-về)
-6. [Zsh + Oh My Zsh](#6-zsh--oh-my-zsh)
-7. [Bật dịch vụ và đăng nhập vào i3](#7-bật-dịch-vụ-và-đăng-nhập-vào-i3)
-8. [Neovim](#8-neovim)
-9. [Gõ tiếng Việt](#9-gõ-tiếng-việt)
-10. [GitHub: đăng nhập một lần](#10-github-đăng-nhập-một-lần)
-11. [Phím tắt](#11-phím-tắt)
-12. [Xử lý sự cố](#12-xử-lý-sự-cố)
+4. [Lấy dotfiles và chạy install.sh](#4-lấy-dotfiles-và-chạy-installsh)
+5. [Khởi động lại vào i3](#5-khởi-động-lại-vào-i3)
+6. [Neovim](#6-neovim)
+7. [Gõ tiếng Việt](#7-gõ-tiếng-việt)
+8. [GitHub: đăng nhập một lần](#8-github-đăng-nhập-một-lần)
+9. [Phím tắt](#9-phím-tắt)
+10. [Xử lý sự cố](#10-xử-lý-sự-cố)
 
 ---
 
@@ -172,96 +170,58 @@ ping -c 3 archlinux.org
 
 ---
 
-## 4. Cài package
+## 4. Lấy dotfiles và chạy `install.sh`
 
-### 4.1 Package chính thức
-
-```sh
-sudo pacman -Syu --needed \
-  xorg-server xorg-xrandr xorg-xset i3-wm i3status i3lock xss-lock dex rofi dunst \
-  sddm kitty tmux zsh fzf ripgrep fd xclip unzip wget \
-  neovim tree-sitter-cli gcc make nodejs npm go \
-  ttf-jetbrains-mono-nerd \
-  pipewire pipewire-audio pipewire-pulse wireplumber \
-  networkmanager network-manager-applet iwd brightnessctl \
-  fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey \
-  thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller \
-  gnome-keyring libsecret
-```
-
-Vai trò của từng nhóm:
-
-| Nhóm | Dùng cho |
-|---|---|
-| `xorg-*`, `i3-*`, `i3status`, `i3lock`, `xss-lock`, `dex`, `rofi`, `dunst` | Giao diện i3 (X11), menu ứng dụng, thông báo |
-| `sddm` | Màn hình đăng nhập |
-| `kitty`, `tmux`, `zsh`, `fzf`, `ripgrep`, `fd`, `xclip` | Terminal và công cụ dòng lệnh |
-| `neovim`, `tree-sitter-cli`, `gcc`, `make` | Neovim + build parser treesitter |
-| `nodejs`, `npm`, `go` | Mason cần để cài LSP (pyright, ts_ls, bashls, gopls) |
-| `ttf-jetbrains-mono-nerd` | Font có icon cho kitty, i3, neo-tree |
-| `pipewire*`, `wireplumber` | Âm thanh |
-| `network-manager-applet`, `brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |
-| `fcitx5*` | Gõ tiếng Việt |
-| `thunar*`, `gvfs`, `tumbler`, … | Quản lý file, ảnh thu nhỏ, giải nén |
-| `gnome-keyring`, `libsecret` | Lưu token GitHub được mã hoá |
-
-> Muốn dùng thêm Hyprland: `sudo pacman -S hyprland hyprlock waybar wofi mako`
-
-### 4.2 AUR helper `yay` và Brave
+Sau khi đăng nhập và **đã có Wi-Fi** (bước 3), chỉ cần 2 lệnh. `git` đã có từ bước 2.3.
 
 ```sh
-cd /tmp
-git clone https://aur.archlinux.org/yay.git
-cd yay && makepkg -si
-cd ~ && rm -rf /tmp/yay
-
-yay -S brave-bin
-```
-
----
-
-## 5. Lấy dotfiles này về
-
-`~/.config` có thể đã có sẵn vài file, nên clone theo kiểu "init + checkout" để không bị lỗi thư mục không rỗng:
-
-```sh
+# Clone vào ~/.config (dùng init + checkout vì ~/.config có thể không rỗng)
 mkdir -p ~/.config && cd ~/.config
 git init -b main
 git remote add origin https://github.com/trongtien/dotconfig.git
 git fetch origin
 git checkout -f -B main origin/main
-```
 
-Symlink các file nằm ngoài `~/.config` (`.zshrc`, `.zsh_profile`, `.xprofile`, script trong `~/.local/scripts`) và copy cấu hình touchpad vào `/etc`:
-
-```sh
+# Cài tất cả
 ~/.config/install.sh
 ```
 
-File cũ nếu có sẽ được đổi tên thành `*.pre-dotconfig`, không bị mất.
+> Muốn xem trước script sẽ chạy những lệnh gì: `DRY_RUN=1 ~/.config/install.sh`
+
+`install.sh` chạy theo thứ tự, dừng ngay nếu có lỗi. Chạy lại nhiều lần không sao.
+
+| Bước | Việc làm |
+|---|---|
+| 1. Kiểm tra mạng | Chưa có mạng thì dừng và nhắc lệnh `nmcli` |
+| 2. pacman | Cài toàn bộ package chính thức (bảng dưới) |
+| 3. yay | Cài `yay` (bản `yay-bin` build sẵn) rồi cài package AUR: `brave-bin` |
+| 4. Zsh | Cài Oh My Zsh (giữ `.zshrc` của repo), đặt zsh làm shell mặc định |
+| 5. Dotfiles | Symlink `.zshrc`, `.zsh_profile`, `.xprofile`, `~/.local/scripts/*` từ `home/`; copy cấu hình touchpad vào `/etc`. File cũ được đổi tên thành `*.pre-dotconfig` |
+| 6. Dịch vụ | Bật `NetworkManager`, `sddm`, pipewire; đặt git lưu token trong gnome-keyring |
+
+Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_PKGS` và `AUR_PKGS`):
+
+| Nhóm | Package | Dùng cho |
+|---|---|---|
+| Giao diện | `xorg-server xorg-xrandr xorg-xset i3-wm i3status i3lock xss-lock dex rofi dunst sddm` | i3 (X11), menu ứng dụng, thông báo, màn hình đăng nhập |
+| Dòng lệnh | `kitty tmux zsh fzf ripgrep fd xclip unzip wget git` | Terminal và công cụ |
+| Neovim | `neovim tree-sitter-cli gcc make nodejs npm go` | Editor, build parser treesitter, Mason cài LSP |
+| Font | `ttf-jetbrains-mono-nerd` | Font có icon cho kitty, i3, neo-tree |
+| Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber` | |
+| Mạng, độ sáng | `networkmanager network-manager-applet iwd brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |
+| Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey` | |
+| File | `thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller` | Quản lý file, ảnh thu nhỏ, giải nén |
+| Keyring | `gnome-keyring libsecret` | Lưu token GitHub mã hoá |
+| AUR | `brave-bin` | Trình duyệt |
+
+> Muốn dùng thêm Hyprland: `sudo pacman -S hyprland hyprlock waybar wofi mako`
 
 ---
 
-## 6. Zsh + Oh My Zsh
+## 5. Khởi động lại vào i3
 
 ```sh
-# Cài Oh My Zsh nhưng giữ .zshrc của repo
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
-
-# Đặt zsh làm shell mặc định (bỏ qua nếu đã tạo user với -s /bin/zsh)
-chsh -s /bin/zsh
-```
-
-`~/.zshrc` → nạp Oh My Zsh rồi `~/.zsh_profile` → nạp `~/.config/personal/*` (alias, PATH), phím fzf, `Ctrl-f` mở tmux-sessionizer.
-
----
-
-## 7. Bật dịch vụ và đăng nhập vào i3
-
-```sh
-sudo systemctl enable sddm
-systemctl --user enable pipewire pipewire-pulse wireplumber
-reboot
+sudo reboot
 ```
 
 Ở màn hình SDDM chọn phiên **i3** (góc trái dưới), đăng nhập bằng mật khẩu (đừng bật autologin, để gnome-keyring tự mở khoá).
@@ -270,11 +230,12 @@ Khi vào i3:
 - `~/.xprofile` đặt biến môi trường cho fcitx5.
 - i3 tự chạy: `nm-applet`, `dunst`, `fcitx5`, `xss-lock`, script `monitor-setup`, và mở kitty ở workspace 1.
 - `monitor-setup`: có màn **HDMI-1** thì chỉ dùng màn ngoài 1920x1080, không có thì dùng màn laptop (độ sáng 100%). Bấm `Super+p` để chạy lại khi cắm/rút màn. Tên cổng khác thì sửa `INTERNAL`/`EXTERNAL` trong `home/.local/scripts/monitor-setup` (xem tên bằng `xrandr`).
-- `xset s off -dpms`: không tự làm tối/tắt màn hình khi để yên (cần `xorg-xset`).
+- `xset s off -dpms`: không tự làm tối/tắt màn hình khi để yên.
+- Shell: `~/.zshrc` → Oh My Zsh → `~/.zsh_profile` → `~/.config/personal/*` (alias, PATH), phím fzf, `Ctrl-f` mở tmux-sessionizer.
 
 ---
 
-## 8. Neovim
+## 6. Neovim
 
 Mở `nvim` lần đầu, `vim.pack` (có sẵn trong Neovim 0.12) tự tải toàn bộ plugin theo `nvim-pack-lock.json`, không hỏi. Sau đó:
 - **nvim-treesitter** tự build parser (cần `tree-sitter-cli` + `gcc`).
@@ -292,7 +253,7 @@ Thêm plugin mới: thêm vào danh sách `vim.pack.add` trong `nvim/lua/kelvin/
 
 ---
 
-## 9. Gõ tiếng Việt
+## 7. Gõ tiếng Việt
 
 fcitx5 + Unikey, kiểu gõ **Telex** (cấu hình trong `fcitx5/`).
 - `Ctrl+Space`: bật/tắt tiếng Việt.
@@ -301,14 +262,13 @@ fcitx5 + Unikey, kiểu gõ **Telex** (cấu hình trong `fcitx5/`).
 
 ---
 
-## 10. GitHub: đăng nhập một lần
+## 8. GitHub: đăng nhập một lần
 
-Dùng Personal Access Token, lưu mã hoá trong gnome-keyring:
+Dùng Personal Access Token, lưu mã hoá trong gnome-keyring (`install.sh` đã đặt `credential.helper`). Chỉ cần khai báo tên/email cho commit:
 
 ```sh
 git config --global user.name  "Tên của bạn"
 git config --global user.email "email@example.com"
-git config --global credential.helper /usr/lib/git-core/git-credential-libsecret
 ```
 
 1. Tạo token: https://github.com/settings/tokens → **Generate new token (classic)** → tick `repo` (và `workflow` nếu sửa GitHub Actions) → copy token `ghp_...`.
@@ -316,7 +276,7 @@ git config --global credential.helper /usr/lib/git-core/git-credential-libsecret
 
 ---
 
-## 11. Phím tắt
+## 9. Phím tắt
 
 ### i3 (`Super` = phím Windows)
 
@@ -385,7 +345,7 @@ git config --global credential.helper /usr/lib/git-core/git-credential-libsecret
 
 ---
 
-## 12. Xử lý sự cố
+## 10. Xử lý sự cố
 
 | Vấn đề | Cách xử lý |
 |---|---|
