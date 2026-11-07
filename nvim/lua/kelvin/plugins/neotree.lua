@@ -20,8 +20,10 @@ require("neo-tree").setup({
         -- giữ netrw cho <leader>pv / `nvim .`
         hijack_netrw_behavior = "disabled",
         filtered_items = {
+            show_hidden_count = false, -- không hiện dòng "(N hidden items)"
             hide_dotfiles = false,
             hide_gitignored = true,
+            hide_by_name = { "__init__.py" }, -- ẩn, bấm H để hiện lại
             never_show = { ".git" },
         },
     },
