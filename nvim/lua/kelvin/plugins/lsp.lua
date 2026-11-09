@@ -45,7 +45,7 @@ require("blink.cmp").setup({
 -- -> màn hình chớp liên tục. Bỏ qua pyright, các server khác vẫn hiện tiến trình.
 require("fidget").setup({
     progress = {
-        ignore = { "pyright" },
+        ignore = { "pyright", "basedpyright" },
         suppress_on_insert = true, -- không hiện khi đang gõ
         ignore_done_already = true, -- bỏ qua tiến trình đã xong ngay khi tới
     },
@@ -56,9 +56,23 @@ vim.lsp.config("*", {
     capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
--- Pyright không tự tìm virtualenv của project -> dùng python hệ thống và báo lỗi import.
--- Trỏ pythonPath vào .venv/venv trong root (thư mục chứa pyproject.toml), nếu có.
-vim.lsp.config("pyright", {
+-- Python dùng basedpyright thay cho pyright: pyright gốc KHÔNG có code action "thêm import"
+-- (tính năng của Pylance) và ở diagnosticMode=openFilesOnly không gợi ý auto-import class
+-- trong file chưa mở. basedpyright (fork của pyright) có cả hai.
+-- Lưu ý: auto-import chỉ hoạt động khi mọi thư mục trên đường dẫn module là tên Python
+-- hợp lệ (vd value_object, KHÔNG phải value-object).
+--
+-- Pyright/basedpyright không tự tìm virtualenv của project -> dùng python hệ thống và báo lỗi
+-- import. Trỏ pythonPath vào .venv/venv trong root (thư mục chứa pyproject.toml), nếu có.
+vim.lsp.config("basedpyright", {
+    settings = {
+        basedpyright = {
+            analysis = {
+                -- mặc định "recommended" rất gắt (báo cả thiếu type, Any...) -> giữ mức như pyright
+                typeCheckingMode = "standard",
+            },
+        },
+    },
     before_init = function(_, config)
         if not config.root_dir then return end
         for _, dir in ipairs({ ".venv", "venv", "env" }) do
@@ -74,8 +88,9 @@ vim.lsp.config("pyright", {
 
 -- Server được cài qua Mason và tự bật (vim.lsp.enable)
 require("mason-lspconfig").setup({
-    ensure_installed = { "lua_ls", "gopls", "ts_ls", "pyright", "bashls" },
-    automatic_enable = true,
+    ensure_installed = { "lua_ls", "gopls", "ts_ls", "basedpyright", "bashls" },
+    -- pyright cũ có thể vẫn còn trong Mason -> không bật, tránh chạy 2 server Python cùng lúc
+    automatic_enable = { exclude = { "pyright" } },
 })
 
 vim.diagnostic.config({
