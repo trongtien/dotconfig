@@ -6,6 +6,7 @@
 require("neo-tree").setup({
     close_if_last_window = true, -- đóng nvim nếu chỉ còn cây
     popup_border_style = "rounded",
+    enable_diagnostics = false, -- không vẽ lại cây mỗi lần LSP gửi diagnostic (gây nháy)
     window = {
         width = 32,
         mappings = {
@@ -16,7 +17,9 @@ require("neo-tree").setup({
     },
     filesystem = {
         follow_current_file = { enabled = true },
-        use_libuv_file_watcher = true, -- tự cập nhật khi file thay đổi
+        -- watcher vẽ lại cây mỗi khi có file đổi (kể cả __pycache__, .ruff_cache) -> nháy.
+        -- Tắt thì cây vẫn tự làm mới sau khi lưu; file tạo từ ngoài nvim thì bấm R.
+        use_libuv_file_watcher = false,
         -- giữ netrw cho <leader>pv / `nvim .`
         hijack_netrw_behavior = "disabled",
         filtered_items = {

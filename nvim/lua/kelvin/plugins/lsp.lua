@@ -41,7 +41,15 @@ require("blink.cmp").setup({
     fuzzy = { implementation = "prefer_rust_with_warning" },
 })
 
-require("fidget").setup({})
+-- Mặc định fidget chạy spinner 10 khung/giây ~3s sau MỖI lần sửa (pyright báo "Analyzing")
+-- -> màn hình chớp liên tục. Bỏ qua pyright, các server khác vẫn hiện tiến trình.
+require("fidget").setup({
+    progress = {
+        ignore = { "pyright" },
+        suppress_on_insert = true, -- không hiện khi đang gõ
+        ignore_done_already = true, -- bỏ qua tiến trình đã xong ngay khi tới
+    },
+})
 require("mason").setup()
 
 vim.lsp.config("*", {
