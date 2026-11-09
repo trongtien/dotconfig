@@ -242,7 +242,8 @@ Khi vào i3:
 
 Mở `nvim` lần đầu, `vim.pack` (có sẵn trong Neovim 0.12) tự tải toàn bộ plugin theo `nvim-pack-lock.json`, không hỏi. Sau đó:
 - **nvim-treesitter** tự build parser (cần `tree-sitter-cli` + `gcc`).
-- **Mason** tự cài LSP: `lua_ls`, `gopls`, `ts_ls`, `pyright`, `bashls` (cần `nodejs`, `npm`, `go`). Xem tiến độ: `:Mason`.
+- **Mason** tự cài LSP: `lua_ls`, `gopls`, `ts_ls`, `pyright`, `bashls` và formatter: `stylua`, `prettierd`, `ruff`, `shfmt`, `goimports` (cần `nodejs`, `npm`, `go`). Xem tiến độ: `:Mason`.
+- **Format khi lưu** (conform): file nào không có formatter thì dùng LSP. `:FormatDisable` tắt (`:FormatDisable!` chỉ buffer hiện tại), `:FormatEnable` bật lại, `:ConformInfo` xem lỗi.
 
 Plugin: rose-pine, telescope, harpoon, treesitter, undotree, fugitive, conform, neo-tree, blink.cmp, lazydev, fidget, mason + lspconfig.
 
@@ -344,12 +345,14 @@ git config --global user.email "email@example.com"
 | `<leader>1..4` | Harpoon: mở file 1–4 |
 | `<leader>u` | Undotree |
 | `<leader>gs` | Git status (fugitive) |
-| `<leader>f` | Format |
+| `<leader>f` | Format (tự format khi lưu) |
 | `gd` / `K` | Tới định nghĩa / xem tài liệu |
 | `<leader>vrn` / `<leader>vca` | Đổi tên / code action |
 | `<leader>vrr` / `<leader>vd` | References / xem lỗi |
 | `<leader>y` / `<leader>p` | Copy ra clipboard / dán không mất register |
-| `Ctrl-y` / `Ctrl-n` / `Ctrl-p` | Completion: chọn / xuống / lên |
+| `Enter` / `Ctrl-y` | Completion: chấp nhận gợi ý |
+| `Tab` / `Shift-Tab`, `Ctrl-n` / `Ctrl-p` | Completion: xuống / lên (`Tab` nhảy trong snippet) |
+| `Ctrl-e` / `Ctrl-Space` | Completion: đóng menu / mở menu |
 
 ---
 

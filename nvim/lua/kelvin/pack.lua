@@ -47,5 +47,6 @@ require("kelvin.plugins.telescope")
 require("kelvin.plugins.harpoon")
 require("kelvin.plugins.misc")
 require("kelvin.plugins.lsp")
+require("kelvin.plugins.format") -- sau lsp: cần mason đã setup
 require("kelvin.plugins.neotree")
 require("kelvin.plugins.multicursor")

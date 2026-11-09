@@ -12,10 +12,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Xoá khoảng trắng thừa cuối dòng khi lưu
+-- (bỏ qua buffer không sửa được -> tránh lỗi E21; giữ nguyên vị trí con trỏ)
 vim.api.nvim_create_autocmd("BufWritePre", {
     group = group,
     pattern = "*",
-    command = [[%s/\s\+$//e]],
+    callback = function(e)
+        if not vim.bo[e.buf].modifiable or vim.bo[e.buf].binary then return end
+        local view = vim.fn.winsaveview()
+        vim.cmd([[keeppatterns keepjumps silent! %s/\s\+$//e]])
+        vim.fn.winrestview(view)
+    end,
 })
 
 -- Phím tắt LSP khi server gắn vào buffer

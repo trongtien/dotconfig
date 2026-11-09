@@ -2,17 +2,43 @@ require("lazydev").setup({
     library = { { path = "${3rd}/luv/library", words = { "vim%.uv" } } },
 })
 
+-- Completion
+--   <CR> / <C-y>         chấp nhận gợi ý (luôn chọn sẵn mục đầu tiên)
+--   <Tab> / <S-Tab>      nhảy trong snippet, không thì xuống/lên trong menu
+--   <C-n>/<C-p>, ↓/↑     xuống / lên
+--   <C-space>            mở menu / bật tắt tài liệu
+--   <C-e>                đóng menu (rồi <CR> để xuống dòng)
+--   <C-b>/<C-f>          cuộn tài liệu,  <C-k> chữ ký hàm
 require("blink.cmp").setup({
-    keymap = { preset = "default" }, -- <C-y> chọn, <C-n>/<C-p> lên xuống
+    keymap = {
+        preset = "enter",
+        ["<C-y>"] = { "select_and_accept", "fallback" },
+        ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
+    },
     appearance = { nerd_font_variant = "mono" },
-    completion = { documentation = { auto_show = true } },
-    signature = { enabled = true },
+    completion = {
+        list = { selection = { preselect = true, auto_insert = false } },
+        accept = { auto_brackets = { enabled = true } }, -- tự thêm () khi chọn hàm
+        menu = {
+            border = "rounded",
+            draw = {
+                treesitter = { "lsp" },
+                columns = { { "kind_icon" }, { "label", "label_description", gap = 1 }, { "source_name" } },
+            },
+        },
+        documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = "rounded" } },
+        ghost_text = { enabled = true }, -- hiện mờ phần còn lại của gợi ý đang chọn
+    },
+    signature = { enabled = true, window = { border = "rounded" } },
     sources = {
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
         providers = {
             lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+            buffer = { score_offset = -3 }, -- ưu tiên LSP/snippet hơn từ trong buffer
         },
     },
+    fuzzy = { implementation = "prefer_rust_with_warning" },
 })
 
 require("fidget").setup({})
