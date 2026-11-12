@@ -37,6 +37,7 @@ PACMAN_PKGS=(
 # Package AUR (yay)
 AUR_PKGS=(
     brave-bin
+    tableplus   # GUI database (MySQL, Postgres, SQLite, Redis...), đóng gói lại từ .deb chính thức
 )
 
 # ---------------------------------------------------------------------

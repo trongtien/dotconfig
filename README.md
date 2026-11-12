@@ -22,7 +22,7 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 ├── home/                   # file nằm ngoài ~/.config → install.sh symlink về $HOME
 │   ├── .zshrc .zsh_profile .xprofile
 │   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
-│   └── .local/share/applications/screenshot.desktop   # mục "Screenshot" trong rofi
+│   └── .local/share/applications/{screenshot,tableplus}.desktop   # mục trong menu rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
 └── install.sh
 ```
@@ -39,8 +39,9 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 6. [Neovim](#6-neovim)
 7. [Gõ tiếng Việt](#7-gõ-tiếng-việt)
 8. [GitHub: đăng nhập một lần](#8-github-đăng-nhập-một-lần)
-9. [Phím tắt](#9-phím-tắt)
-10. [Xử lý sự cố](#10-xử-lý-sự-cố)
+9. [TablePlus (GUI database)](#9-tableplus-gui-database)
+10. [Phím tắt](#10-phím-tắt)
+11. [Xử lý sự cố](#11-xử-lý-sự-cố)
 
 ---
 
@@ -195,7 +196,7 @@ git checkout -f -B main origin/main
 |---|---|
 | 1. Kiểm tra mạng | Chưa có mạng thì dừng và nhắc lệnh `nmcli` |
 | 2. pacman | Cài toàn bộ package chính thức (bảng dưới) |
-| 3. yay | Cài `yay` (bản `yay-bin` build sẵn) rồi cài package AUR: `brave-bin` |
+| 3. yay | Cài `yay` (bản `yay-bin` build sẵn) rồi cài package AUR: `brave-bin`, `tableplus` |
 | 4. Zsh | Cài Oh My Zsh (giữ `.zshrc` của repo), đặt zsh làm shell mặc định |
 | 5. Dotfiles | Symlink `.zshrc`, `.zsh_profile`, `.xprofile`, `~/.local/scripts/*` từ `home/`; copy cấu hình touchpad vào `/etc`. File cũ được đổi tên thành `*.pre-dotconfig` |
 | 6. Dịch vụ | Bật `NetworkManager`, `sddm`, pipewire; đặt git lưu token trong gnome-keyring |
@@ -215,6 +216,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | File | `thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller` | Quản lý file, ảnh thu nhỏ, giải nén |
 | Keyring | `gnome-keyring libsecret` | Lưu token GitHub mã hoá |
 | AUR | `brave-bin` | Trình duyệt |
+| AUR | `tableplus` | GUI quản lý database (xem [mục 9](#9-tableplus-gui-database)) |
 
 > Muốn dùng thêm Hyprland: `sudo pacman -S hyprland hyprlock waybar wofi mako`
 
@@ -280,7 +282,24 @@ git config --global user.email "email@example.com"
 
 ---
 
-## 9. Phím tắt
+## 9. TablePlus (GUI database)
+
+[TablePlus](https://tableplus.com/) là app quản lý database (MySQL/MariaDB, PostgreSQL, SQLite, Redis, MongoDB, SQL Server…). Trang chủ chỉ có repo APT/YUM/DNF và AppImage, không có bản Arch, nên dùng package AUR `tableplus`: nó tải đúng file `.deb` từ `deb.tableplus.com` (có kiểm tra sha256) rồi đóng gói lại. `install.sh` đã cài sẵn (nằm trong `AUR_PKGS`). Cài tay:
+
+```sh
+yay -S --needed tableplus     # phụ thuộc: gtksourceview3 libgee gnome-keyring
+```
+
+- Mở: `Super+r` → gõ **TablePlus** (hoặc `database`, `sql`, `mysql`, `postgres`…), hoặc chạy `tableplus` trong terminal.
+- Menu: package cài `/usr/share/applications/tableplus.desktop` nhưng thiếu mô tả/từ khoá, nên repo có bản riêng `home/.local/share/applications/tableplus.desktop` (thêm `Comment`, `Keywords`, `StartupWMClass=TablePlus`). `install.sh` symlink nó vào `~/.local/share/applications/`, file này được ưu tiên hơn bản hệ thống. Có `TryExec` nên chưa cài TablePlus thì mục này tự ẩn.
+- Chương trình nằm ở `/opt/tableplus/`, lệnh `tableplus` ở `/usr/local/bin/`.
+- Mật khẩu kết nối được lưu trong gnome-keyring.
+- Bản Linux vẫn là **Alpha**; bản miễn phí giới hạn số tab/kết nối mở cùng lúc.
+- Cập nhật: `yay -Syu` (hoặc `yay -S tableplus`). Gỡ: `yay -Rns tableplus`.
+
+---
+
+## 10. Phím tắt
 
 ### i3 (`Super` = phím Windows)
 
@@ -356,7 +375,7 @@ git config --global user.email "email@example.com"
 
 ---
 
-## 10. Xử lý sự cố
+## 11. Xử lý sự cố
 
 | Vấn đề | Cách xử lý |
 |---|---|

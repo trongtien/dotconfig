@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=TablePlus
+GenericName=Database Client
+Comment=GUI quản lý database: MySQL, PostgreSQL, SQLite, Redis, MongoDB...
+TryExec=/opt/tableplus/tableplus
+Exec=/usr/local/bin/tableplus %u
+Icon=/opt/tableplus/resource/image/logo.png
+Terminal=false
+Categories=Development;Database;
+MimeType=x-scheme-handler/tableplus;
+Keywords=database;db;sql;mysql;postgres;postgresql;sqlite;redis;mongodb;
+StartupWMClass=TablePlus
