@@ -20,7 +20,7 @@ require("neo-tree").setup({
         -- watcher vẽ lại cây mỗi khi có file đổi (kể cả __pycache__, .ruff_cache) -> nháy.
         -- Tắt thì cây vẫn tự làm mới sau khi lưu; file tạo từ ngoài nvim thì bấm R.
         use_libuv_file_watcher = false,
-        -- giữ netrw cho <leader>pv / `nvim .`
+        -- để oil xử lý <leader>pv / `nvim .`
         hijack_netrw_behavior = "disabled",
         filtered_items = {
             show_hidden_count = false, -- không hiện dòng "(N hidden items)"

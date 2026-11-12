@@ -39,6 +39,7 @@ vim.pack.add({
     gh("nvim-tree/nvim-web-devicons"),
     { src = gh("nvim-neo-tree/neo-tree.nvim"), version = "v3.x" },
     gh("mg979/vim-visual-multi"), -- multi cursor
+    gh("stevearc/oil.nvim"), -- quản lý file kiểu buffer (thêm/sửa/xoá file)
 }, { confirm = false }) -- tự cài plugin còn thiếu, không hỏi
 
 require("kelvin.plugins.colors")
@@ -49,4 +50,5 @@ require("kelvin.plugins.misc")
 require("kelvin.plugins.lsp")
 require("kelvin.plugins.format") -- sau lsp: cần mason đã setup
 require("kelvin.plugins.neotree")
+require("kelvin.plugins.oil")
 require("kelvin.plugins.multicursor")

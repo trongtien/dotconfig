@@ -12,12 +12,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Xoá khoảng trắng thừa cuối dòng khi lưu
--- (bỏ qua buffer không sửa được -> tránh lỗi E21; giữ nguyên vị trí con trỏ)
+-- (bỏ qua buffer không sửa được -> tránh lỗi E21; bỏ qua buffer đặc biệt như oil;
+--  giữ nguyên vị trí con trỏ)
 vim.api.nvim_create_autocmd("BufWritePre", {
     group = group,
     pattern = "*",
     callback = function(e)
-        if not vim.bo[e.buf].modifiable or vim.bo[e.buf].binary then return end
+        local bo = vim.bo[e.buf]
+        if not bo.modifiable or bo.binary or bo.buftype ~= "" then return end
         local view = vim.fn.winsaveview()
         vim.cmd([[keeppatterns keepjumps silent! %s/\s\+$//e]])
         vim.fn.winrestview(view)
@@ -40,7 +42,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, o)
     end,
 })
-
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25

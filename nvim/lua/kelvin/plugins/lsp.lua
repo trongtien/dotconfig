@@ -93,7 +93,48 @@ require("mason-lspconfig").setup({
     automatic_enable = { exclude = { "pyright" } },
 })
 
+-- Hiển thị lỗi/cảnh báo của LSP:
+--   - chữ mờ cuối dòng (virtual_text) + icon ở cột trái (signs) + gạch chân chỗ lỗi
+--   - lỗi nặng hơn được ưu tiên hiện trước (severity_sort)
+--   - không cập nhật khi đang gõ ở insert mode (đỡ nhảy chữ), cập nhật khi về normal
+local sev = vim.diagnostic.severity
 vim.diagnostic.config({
-    virtual_text = true,
+    severity_sort = true,
+    underline = true,
+    update_in_insert = false,
+    virtual_text = { spacing = 2, source = "if_many", prefix = "●" },
+    signs = {
+        text = {
+            [sev.ERROR] = " ",
+            [sev.WARN] = " ",
+            [sev.INFO] = " ",
+            [sev.HINT] = "󰌵 ",
+        },
+    },
     float = { border = "rounded", source = true },
+})
+
+-- Di chuyển giữa các lỗi / cảnh báo (bỏ qua info/hint), tự mở popup chi tiết sau khi nhảy
+--   <leader>ne   lỗi kế tiếp          <leader>pe   lỗi trước đó
+--   <leader>re   xem chi tiết lỗi trên dòng hiện tại
+--   <leader>pd   danh sách lỗi của cả project (Telescope)
+-- (Mặc định của nvim vẫn còn: ]d / [d, ]D / [D, <C-w>d)
+local function jump(count)
+    return function()
+        vim.diagnostic.jump({
+            count = count,
+            severity = { min = sev.WARN },
+            on_jump = function(_, bufnr)
+                vim.diagnostic.open_float({ bufnr = bufnr, scope = "cursor", focus = false })
+            end,
+        })
+    end
+end
+vim.keymap.set("n", "<leader>ne", jump(1), { desc = "Diagnostic: lỗi kế tiếp" })
+vim.keymap.set("n", "<leader>pe", jump(-1), { desc = "Diagnostic: lỗi trước đó" })
+vim.keymap.set("n", "<leader>re", function() vim.diagnostic.open_float({ scope = "line" }) end, {
+    desc = "Diagnostic: xem chi tiết lỗi trên dòng",
+})
+vim.keymap.set("n", "<leader>pd", function() require("telescope.builtin").diagnostics() end, {
+    desc = "Diagnostic: danh sách lỗi (Telescope)",
 })
