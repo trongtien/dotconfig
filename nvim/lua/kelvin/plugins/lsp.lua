@@ -70,10 +70,19 @@ vim.lsp.config("basedpyright", {
             analysis = {
                 -- mặc định "recommended" rất gắt (báo cả thiếu type, Any...) -> giữ mức như pyright
                 typeCheckingMode = "standard",
+                -- phân tích cả project chứ không chỉ file đang mở -> <leader>pd / <leader>le
+                -- thấy lỗi của mọi file .py (mặc định "openFilesOnly")
+                diagnosticMode = "workspace",
             },
         },
     },
-    before_init = function(_, config)
+    before_init = function(params, config)
+        -- Nvim 0.12 báo hỗ trợ "pull diagnostics" -> basedpyright chuyển sang chế độ pull, mà
+        -- request workspace/diagnostic của nó treo mãi với nvim => file chưa mở không có lỗi.
+        -- Bỏ capability này để basedpyright tự đẩy (publishDiagnostics) lỗi của mọi file.
+        params.capabilities.textDocument.diagnostic = nil
+        if params.capabilities.workspace then params.capabilities.workspace.diagnostics = nil end
+
         if not config.root_dir then return end
         for _, dir in ipairs({ ".venv", "venv", "env" }) do
             local python = vim.fs.joinpath(config.root_dir, dir, "bin", "python")
@@ -117,7 +126,11 @@ vim.diagnostic.config({
 -- Di chuyển giữa các lỗi / cảnh báo (bỏ qua info/hint), tự mở popup chi tiết sau khi nhảy
 --   <leader>ne   lỗi kế tiếp          <leader>pe   lỗi trước đó
 --   <leader>re   xem chi tiết lỗi trên dòng hiện tại
---   <leader>pd   danh sách lỗi của cả project (Telescope)
+--   <leader>pd   danh sách lỗi/cảnh báo của TẤT CẢ file (Telescope, gõ để lọc)
+--   <leader>le   đưa lỗi/cảnh báo của tất cả file vào quickfix, rồi <C-k>/<C-j> để nhảy
+--                qua lại giữa các file
+-- "Tất cả file" = mọi file mà LSP đã phân tích: basedpyright, lua_ls, gopls quét cả project;
+-- ts_ls chỉ báo lỗi file đang mở (dùng :compiler tsc | make để kiểm tra cả project TS).
 -- (Mặc định của nvim vẫn còn: ]d / [d, ]D / [D, <C-w>d)
 local function jump(count)
     return function()
@@ -135,6 +148,9 @@ vim.keymap.set("n", "<leader>pe", jump(-1), { desc = "Diagnostic: lỗi trước
 vim.keymap.set("n", "<leader>re", function() vim.diagnostic.open_float({ scope = "line" }) end, {
     desc = "Diagnostic: xem chi tiết lỗi trên dòng",
 })
-vim.keymap.set("n", "<leader>pd", function() require("telescope.builtin").diagnostics() end, {
-    desc = "Diagnostic: danh sách lỗi (Telescope)",
-})
+vim.keymap.set("n", "<leader>pd", function()
+    require("telescope.builtin").diagnostics({ severity_limit = "WARN" })
+end, { desc = "Diagnostic: lỗi của tất cả file (Telescope)" })
+vim.keymap.set("n", "<leader>le", function()
+    vim.diagnostic.setqflist({ severity = { min = sev.WARN }, title = "Lỗi / cảnh báo" })
+end, { desc = "Diagnostic: lỗi của tất cả file -> quickfix" })
