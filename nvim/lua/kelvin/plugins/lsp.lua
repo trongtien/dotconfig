@@ -35,6 +35,13 @@ require("blink.cmp").setup({
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
         providers = {
             lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+            -- basedpyright trả hàng nghìn gợi ý auto-import (cả thư viện trong .venv) -> mỗi request
+            -- mất ~0.7-3s, lại đánh dấu isIncomplete nên blink gửi lại request ở MỖI phím gõ.
+            -- Mặc định blink chờ LSP tới 2s rồi mới hiện menu, còn buffer chỉ là "fallback" khi
+            -- LSP trả 0 kết quả => gõ nhanh thì menu không hiện / hiện rất trễ ("lúc được lúc không").
+            --   async = true   hiện ngay gợi ý từ nguồn khác, gợi ý LSP chèn thêm vào khi về tới
+            --   fallbacks = {} luôn lấy từ trong buffer (điểm thấp hơn), không đợi LSP trả rỗng
+            lsp = { async = true, timeout_ms = 500, fallbacks = {} },
             buffer = { score_offset = -3 }, -- ưu tiên LSP/snippet hơn từ trong buffer
         },
     },

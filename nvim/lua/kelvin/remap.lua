@@ -46,10 +46,15 @@ vim.keymap.set("n", "<leader>q", function()
         vim.notify("Buffer chưa lưu (<leader>w để lưu)", vim.log.levels.WARN)
         return
     end
-    -- Buffer đặc biệt (neo-tree, help, quickfix...): xoá thẳng
-    if vim.bo[buf].buftype ~= "" then return vim.cmd.bdelete(buf) end
+    -- Buffer đặc biệt (neo-tree, help, quickfix...) hoặc buffer tự huỷ khi ẩn
+    -- (fugitive COMMIT_EDITMSG có bufhidden=wipe): xoá thẳng, đóng luôn split của nó
+    if vim.bo[buf].buftype ~= "" or vim.bo[buf].bufhidden ~= ""
+        or vim.tbl_contains({ "gitcommit", "gitrebase" }, vim.bo[buf].filetype) then
+        return vim.cmd.bdelete(buf)
+    end
     -- Chuyển sang buffer khác trước rồi mới xoá, để không đóng luôn cửa sổ (giữ split/neo-tree)
     vim.cmd.bprevious()
     if vim.api.nvim_get_current_buf() == buf then vim.cmd.enew() end
-    vim.cmd.bdelete(buf)
+    -- bprevious có thể đã khiến buffer bị wipe -> tránh E516
+    if vim.api.nvim_buf_is_valid(buf) then vim.cmd.bdelete(buf) end
 end, { desc = "Đóng buffer hiện tại" })
