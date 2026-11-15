@@ -24,6 +24,7 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 │   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
 │   └── .local/share/applications/{screenshot,tableplus}.desktop   # mục trong menu rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
+├── etc/NetworkManager/conf.d/dns.conf     # → /etc (DNS 1.1.1.1/8.8.8.8, bỏ DNS nhà mạng)
 └── install.sh
 ```
 
@@ -380,6 +381,7 @@ yay -S --needed tableplus     # phụ thuộc: gtksourceview3 libgee gnome-keyri
 | Vấn đề | Cách xử lý |
 |---|---|
 | Không có Wi-Fi sau khi cài | `sudo systemctl enable --now NetworkManager`, rồi `nmtui`. Không có NetworkManager thì boot lại USB, `arch-chroot` và `pacman -S networkmanager`. |
+| Không vào được medium.com (hoặc trang khác) | DNS nhà mạng (Viettel/VNPT) chặn: `getent hosts medium.com` ra `127.0.0.1`. `install.sh` đã cài `etc/NetworkManager/conf.d/dns.conf` (DNS 1.1.1.1/8.8.8.8 cho mọi mạng). Cài tay: `sudo install -Dm644 ~/.config/etc/NetworkManager/conf.d/dns.conf /etc/NetworkManager/conf.d/dns.conf && sudo systemctl reload NetworkManager`. Chỉ đổi một mạng: `nmcli con mod "Tên-WiFi" ipv4.dns "1.1.1.1 8.8.8.8" ipv4.ignore-auto-dns yes && nmcli con up "Tên-WiFi"`. Kiểm tra `cat /etc/resolv.conf`. Rồi xoá cache DNS của trình duyệt hoặc khởi động lại trình duyệt. |
 | Màn hình tự tối/tắt sau 10 phút | Cài `xorg-xset`, `Super+w`. Nếu màn ngoài vẫn tự tối khi đang dùng: tắt ECO / Dynamic Contrast / Auto Brightness trong menu của màn. |
 | Không gõ được tiếng Việt trong kitty | Đăng xuất/đăng nhập lại để `~/.xprofile` có hiệu lực; kiểm tra `fcitx5-remote` trả về số. |
 | Treesitter không highlight | `which tree-sitter gcc`, rồi trong nvim `:TSUpdate`. |

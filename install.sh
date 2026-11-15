@@ -121,6 +121,12 @@ done
 if ! cmp -s "$DOT/etc/X11/xorg.conf.d/30-touchpad.conf" /etc/X11/xorg.conf.d/30-touchpad.conf; then
     run sudo install -Dm644 "$DOT/etc/X11/xorg.conf.d/30-touchpad.conf" /etc/X11/xorg.conf.d/30-touchpad.conf
 fi
+
+# DNS: dùng 1.1.1.1/8.8.8.8 thay DNS nhà mạng (Viettel/VNPT chặn medium.com bằng DNS)
+if ! cmp -s "$DOT/etc/NetworkManager/conf.d/dns.conf" /etc/NetworkManager/conf.d/dns.conf; then
+    run sudo install -Dm644 "$DOT/etc/NetworkManager/conf.d/dns.conf" /etc/NetworkManager/conf.d/dns.conf
+    run sudo systemctl reload NetworkManager
+fi
 ok "Dotfiles"
 
 # ---------------------------------------------------------------------
