@@ -210,6 +210,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | Giao diện | `xorg-server xorg-xrandr xorg-xset i3-wm i3status i3lock xss-lock dex rofi dunst sddm` | i3 (X11), menu ứng dụng, thông báo, màn hình đăng nhập |
 | Dòng lệnh | `kitty tmux zsh fzf ripgrep fd xclip unzip wget git` | Terminal và công cụ |
 | Neovim | `neovim tree-sitter-cli gcc make nodejs npm go` | Editor, build parser treesitter, Mason cài LSP |
+| Bun | `bun` | JS runtime + package manager; global bin ở `~/.bun/bin` (đã thêm vào PATH trong `personal/paths`) |
 | Font | `ttf-jetbrains-mono-nerd` | Font có icon cho kitty, i3, neo-tree |
 | Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber` | |
 | Mạng, độ sáng | `networkmanager network-manager-applet iwd brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |

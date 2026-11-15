@@ -18,6 +18,8 @@ PACMAN_PKGS=(
     kitty tmux zsh fzf ripgrep fd xclip unzip wget git
     # Neovim + build parser treesitter + runtime cho LSP (Mason)
     neovim tree-sitter-cli gcc make nodejs npm go
+    # JS runtime + package manager (bun)
+    bun
     # Vẽ ảnh/sơ đồ mermaid trong nvim (snacks.image)
     imagemagick
     # Font có icon
