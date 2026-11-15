@@ -40,6 +40,8 @@ vim.pack.add({
     { src = gh("nvim-neo-tree/neo-tree.nvim"), version = "v3.x" },
     gh("mg979/vim-visual-multi"), -- multi cursor
     gh("stevearc/oil.nvim"), -- quản lý file kiểu buffer (thêm/sửa/xoá file)
+    gh("MeanderingProgrammer/render-markdown.nvim"), -- xem markdown đã render ngay trong buffer
+    gh("folke/snacks.nvim"), -- snacks.image: vẽ ảnh + sơ đồ mermaid trong markdown
 }, { confirm = false }) -- tự cài plugin còn thiếu, không hỏi
 
 require("kelvin.plugins.colors")
@@ -52,3 +54,4 @@ require("kelvin.plugins.format") -- sau lsp: cần mason đã setup
 require("kelvin.plugins.neotree")
 require("kelvin.plugins.oil")
 require("kelvin.plugins.multicursor")
+require("kelvin.plugins.markdown")

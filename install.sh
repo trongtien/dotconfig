@@ -18,6 +18,8 @@ PACMAN_PKGS=(
     kitty tmux zsh fzf ripgrep fd xclip unzip wget git
     # Neovim + build parser treesitter + runtime cho LSP (Mason)
     neovim tree-sitter-cli gcc make nodejs npm go
+    # Vẽ ảnh/sơ đồ mermaid trong nvim (snacks.image)
+    imagemagick
     # Font có icon
     ttf-jetbrains-mono-nerd
     # Âm thanh
@@ -63,6 +65,12 @@ ok "Có mạng"
 step "2/6 Cài package chính thức (pacman)"
 run sudo pacman -Syu --needed --noconfirm "${PACMAN_PKGS[@]}"
 ok "${#PACMAN_PKGS[@]} package"
+
+# mmdc: vẽ sơ đồ ```mermaid``` trong markdown (nvim snacks.image), cài vào ~/.local không cần sudo
+if ! command -v mmdc >/dev/null; then
+    run npm install -g --prefix "$HOME/.local" @mermaid-js/mermaid-cli
+fi
+ok "mermaid-cli (mmdc)"
 
 # ---------------------------------------------------------------------
 step "3/6 Cài yay và package AUR"
