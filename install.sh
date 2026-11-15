@@ -38,6 +38,7 @@ PACMAN_PKGS=(
 AUR_PKGS=(
     brave-bin
     tableplus   # GUI database (MySQL, Postgres, SQLite, Redis...), đóng gói lại từ .deb chính thức
+    cloudflare-warp-bin   # VPN miễn phí của Cloudflare, vượt chặn của nhà mạng (lệnh warp-cli)
 )
 
 # ---------------------------------------------------------------------
@@ -134,6 +135,16 @@ step "6/6 Bật dịch vụ"
 run sudo systemctl enable NetworkManager sddm
 run systemctl --user enable pipewire.socket pipewire-pulse.socket wireplumber.service
 ok "NetworkManager, sddm, pipewire"
+
+# Cloudflare WARP: bật dịch vụ, đăng ký thiết bị (chưa kết nối, bật bằng: vpn-on)
+run sudo systemctl enable --now warp-svc
+if [[ -z "${DRY_RUN:-}" ]]; then
+    for _ in {1..10}; do warp-cli --accept-tos status >/dev/null 2>&1 && break; sleep 1; done
+    warp-cli --accept-tos registration show >/dev/null 2>&1 || warp-cli --accept-tos registration new
+else
+    printf '  $ warp-cli --accept-tos registration new\n'
+fi
+ok "Cloudflare WARP (vpn-on / vpn-off / vpn)"
 
 # GitHub: lưu token trong gnome-keyring
 run git config --global credential.helper /usr/lib/git-core/git-credential-libsecret

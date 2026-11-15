@@ -41,8 +41,9 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 7. [Gõ tiếng Việt](#7-gõ-tiếng-việt)
 8. [GitHub: đăng nhập một lần](#8-github-đăng-nhập-một-lần)
 9. [TablePlus (GUI database)](#9-tableplus-gui-database)
-10. [Phím tắt](#10-phím-tắt)
-11. [Xử lý sự cố](#11-xử-lý-sự-cố)
+10. [VPN: Cloudflare WARP](#10-vpn-cloudflare-warp)
+11. [Phím tắt](#11-phím-tắt)
+12. [Xử lý sự cố](#12-xử-lý-sự-cố)
 
 ---
 
@@ -300,7 +301,32 @@ yay -S --needed tableplus     # phụ thuộc: gtksourceview3 libgee gnome-keyri
 
 ---
 
-## 10. Phím tắt
+## 10. VPN: Cloudflare WARP
+
+Nhà mạng chặn trang web theo 2 kiểu:
+
+| Kiểu chặn | Dấu hiệu | Cách vượt |
+|---|---|---|
+| Chặn DNS (phổ biến nhất, vd. medium.com) | `getent hosts medium.com` ra `127.0.0.1` | Đã xử lý bằng `etc/NetworkManager/conf.d/dns.conf` (DNS 1.1.1.1/8.8.8.8), không cần VPN |
+| Chặn IP/SNI | DNS đúng nhưng vẫn không kết nối được | Bật WARP |
+
+[WARP](https://one.one.one.one/) là VPN miễn phí của Cloudflare, mã hoá toàn bộ lưu lượng nên nhà mạng không chặn được. `install.sh` cài package AUR `cloudflare-warp-bin`, bật dịch vụ `warp-svc` và đăng ký thiết bị, nhưng **không tự kết nối**. Alias trong `personal/alias`:
+
+```sh
+vpn-on     # warp-cli connect
+vpn-off    # warp-cli disconnect
+vpn        # warp-cli status
+curl -s https://www.cloudflare.com/cdn-cgi/trace | grep warp   # warp=on là đang qua WARP
+```
+
+- Khi bật, WARP tự dùng DNS riêng (1.1.1.1 qua DoH) và giữ nguyên kết nối sau khi khởi động lại máy; tắt hẳn bằng `vpn-off`.
+- WARP **không** giúp vào được tên miền không tồn tại (lỗi `DNS_PROBE_POSSIBLE`/`NXDOMAIN` ở mọi DNS, vd. tên miền `.vn` hết hạn): kiểm tra bằng `getent hosts <tên-miền>`.
+- Cài tay: `yay -S cloudflare-warp-bin && sudo systemctl enable --now warp-svc && warp-cli --accept-tos registration new`.
+- Gỡ: `vpn-off; warp-cli registration delete; sudo systemctl disable --now warp-svc; yay -Rns cloudflare-warp-bin`.
+
+---
+
+## 11. Phím tắt
 
 ### i3 (`Super` = phím Windows)
 
@@ -376,7 +402,7 @@ yay -S --needed tableplus     # phụ thuộc: gtksourceview3 libgee gnome-keyri
 
 ---
 
-## 11. Xử lý sự cố
+## 12. Xử lý sự cố
 
 | Vấn đề | Cách xử lý |
 |---|---|

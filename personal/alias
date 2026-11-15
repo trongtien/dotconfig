@@ -10,3 +10,7 @@ alias unKillBT="rfkill unblock bluetooth"
 alias ezrc="$VIM ~/.zshrc"
 alias ebp="$VIM ~/.zsh_profile"
 alias eirc="$VIM $XDG_CONFIG_HOME/i3/config"
+# Cloudflare WARP (VPN)
+alias vpn-on="warp-cli --accept-tos connect"
+alias vpn-off="warp-cli --accept-tos disconnect"
+alias vpn="warp-cli --accept-tos status"
