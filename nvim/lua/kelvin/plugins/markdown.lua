@@ -10,10 +10,22 @@ vim.keymap.set("n", "<leader>mp", "<cmd>RenderMarkdown toggle<cr>", { desc = "Ma
 
 -- Vẽ ảnh + sơ đồ ```mermaid``` (flowchart, sequence...) ngay trong buffer.
 -- render-markdown không vẽ được mermaid, phần này do snacks.image đảm nhận.
--- Cần: kitty (graphics protocol), tmux `allow-passthrough on`, lệnh `mmdc` (@mermaid-js/mermaid-cli).
+-- Cần: kitty (graphics protocol), tmux `allow-passthrough on`, `mmdc` (@mermaid-js/mermaid-cli), imagemagick.
+-- mmdc cần trình duyệt headless: dùng luôn Brave có sẵn thay vì tải chrome-headless-shell của puppeteer.
+local puppeteer_cfg = vim.fn.stdpath("config") .. "/mermaid-puppeteer.json"
+local use_brave = vim.fn.executable("/usr/bin/brave") == 1
+
 require("snacks").setup({
     image = {
         enabled = true,
+        convert = {
+            mermaid = function()
+                local theme = vim.o.background == "light" and "neutral" or "dark"
+                local args = { "-i", "{src}", "-o", "{file}", "-b", "transparent", "-t", theme, "-s", "{scale}" }
+                if use_brave then vim.list_extend(args, { "-p", puppeteer_cfg }) end
+                return args
+            end,
+        },
         doc = {
             inline = true, -- vẽ sơ đồ ngay dưới code block
             float = true, -- terminal không hỗ trợ inline thì hiện float khi đứng trên block
