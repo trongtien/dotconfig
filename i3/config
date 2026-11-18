@@ -43,9 +43,12 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -c 000000
 exec --no-startup-id nm-applet
 exec --no-startup-id dunst
-exec --no-startup-id fcitx5 -d --replace
-# Đợi fcitx5 sẵn sàng rồi mới mở terminal (kitty chỉ kết nối IME lúc khởi động)
-exec --no-startup-id sh -c 'for i in $(seq 50); do fcitx5-remote >/dev/null 2>&1 && break; sleep 0.1; done; sleep 0.5; i3-msg "workspace number $ws1; exec $terminal"'
+# fcitx5 + mở terminal đầu tiên, chạy TUẦN TỰ trong một lệnh:
+#  - Không dùng --replace: dex (autostart) hoặc dbus có thể đã khởi động fcitx5;
+#    --replace sẽ SIGKILL instance đó sau khi kitty đã kết nối → kitty mất IME vĩnh viễn.
+#  - Không dùng fcitx5-remote để chờ: nó kích hoạt fcitx5 qua dbus (thêm instance nữa).
+#    NameHasOwner chỉ hỏi, không kích hoạt. Chờ frontend ibus (kitty dùng GLFW_IM_MODULE=ibus).
+exec --no-startup-id sh -c 'fcitx5 -d; for i in $(seq 100); do dbus-send --session --print-reply=literal --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.NameHasOwner string:org.freedesktop.IBus 2>/dev/null | grep -q true && break; sleep 0.1; done; sleep 1; i3-msg "workspace number $ws1; exec $terminal"'
 
 # ---------------------------------------------------------------------
 #  Phím cơ bản (giống Hyprland)
