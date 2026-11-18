@@ -31,7 +31,7 @@ PACMAN_PKGS=(
     # Chụp màn hình (script ~/.local/scripts/screenshot), thông báo
     scrot libnotify
     # Gõ tiếng Việt
-    fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey
+    fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-bamboo
     # Quản lý file
     thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller
     # Lưu token GitHub mã hoá

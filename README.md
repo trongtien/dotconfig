@@ -1,6 +1,6 @@
 # dotconfig
 
-Cấu hình Arch Linux của mình: **i3 (X11)** + kitty + tmux + zsh + Neovim (`vim.pack`), gõ tiếng Việt bằng fcitx5-unikey. Có kèm cấu hình Hyprland/waybar/wofi để dự phòng.
+Cấu hình Arch Linux của mình: **i3 (X11)** + kitty + tmux + zsh + Neovim (`vim.pack`), gõ tiếng Việt bằng fcitx5-bamboo. Có kèm cấu hình Hyprland/waybar/wofi để dự phòng.
 
 Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đúng những thư mục được theo dõi; mọi thứ khác trong `~/.config` (dữ liệu trình duyệt, cache, cookie…) bị bỏ qua.
 
@@ -14,7 +14,7 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 │   ├── init.lua
 │   ├── nvim-pack-lock.json # khoá phiên bản plugin
 │   └── lua/kelvin/{set,remap,pack}.lua, plugins/*.lua
-├── fcitx5/                 # bộ gõ: Unikey, Telex
+├── fcitx5/                 # bộ gõ: Bamboo, Telex
 ├── personal/               # alias, hàm, PATH (được ~/.zsh_profile source)
 ├── hypr/ waybar/ wofi/     # Hyprland (Wayland), không dùng mặc định
 ├── Thunar/ xfce4/          # file manager
@@ -215,7 +215,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber` | |
 | Mạng, độ sáng | `networkmanager network-manager-applet iwd brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |
 | Chụp màn hình | `scrot libnotify` | Script `screenshot`, thông báo sau khi chụp |
-| Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-unikey` | |
+| Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-bamboo` | |
 | File | `thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller` | Quản lý file, ảnh thu nhỏ, giải nén |
 | Keyring | `gnome-keyring libsecret` | Lưu token GitHub mã hoá |
 | AUR | `brave-bin` | Trình duyệt |
@@ -264,10 +264,10 @@ Thêm plugin mới: thêm vào danh sách `vim.pack.add` trong `nvim/lua/kelvin/
 
 ## 7. Gõ tiếng Việt
 
-fcitx5 + Unikey, kiểu gõ **Telex** (cấu hình trong `fcitx5/`).
+fcitx5 + Bamboo, kiểu gõ **Telex** (cấu hình trong `fcitx5/`).
 - `Ctrl+Space`: bật/tắt tiếng Việt.
 - Cấu hình thêm: chạy `fcitx5-configtool`.
-- kitty dùng `GLFW_IM_MODULE=ibus` (đặt trong `~/.xprofile`) để gõ được tiếng Việt. i3 đợi fcitx5 sẵn sàng rồi mới mở kitty đầu tiên.
+- kitty dùng `GLFW_IM_MODULE=ibus` (đặt trong `~/.xprofile`) để gõ được tiếng Việt. i3 đợi frontend ibus của fcitx5 sẵn sàng rồi mới mở kitty đầu tiên (kitty chỉ kết nối bộ gõ lúc mở; cửa sổ nào không gõ được tiếng Việt thì mở cửa sổ mới + `tmux a`).
 
 ---
 
