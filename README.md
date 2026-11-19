@@ -22,7 +22,7 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 ├── home/                   # file nằm ngoài ~/.config → install.sh symlink về $HOME
 │   ├── .zshrc .zsh_profile .xprofile
 │   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
-│   └── .local/share/applications/{screenshot,tableplus}.desktop   # mục trong menu rofi
+│   └── .local/share/applications/{screenshot,tableplus,firefox}.desktop   # mục trong menu rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
 ├── etc/NetworkManager/conf.d/dns.conf     # → /etc (DNS 1.1.1.1/8.8.8.8, bỏ DNS nhà mạng)
 └── install.sh
@@ -218,6 +218,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-bamboo` | |
 | File | `thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller` | Quản lý file, ảnh thu nhỏ, giải nén |
 | Keyring | `gnome-keyring libsecret` | Lưu token GitHub mã hoá |
+| Trình duyệt | `firefox` | Trình duyệt thứ hai; mục menu `home/.local/share/applications/firefox.desktop` (`Super+r` → gõ **Firefox**, `browser`, `web`…, có thêm cửa sổ riêng tư) |
 | AUR | `brave-bin` | Trình duyệt |
 | AUR | `tableplus` | GUI quản lý database (xem [mục 9](#9-tableplus-gui-database)) |
 

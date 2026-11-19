@@ -36,6 +36,8 @@ PACMAN_PKGS=(
     thunar thunar-archive-plugin thunar-volman gvfs tumbler ffmpegthumbnailer file-roller
     # Lưu token GitHub mã hoá
     gnome-keyring libsecret
+    # Trình duyệt thứ hai (Brave cài từ AUR bên dưới)
+    firefox
 )
 
 # Package AUR (yay)

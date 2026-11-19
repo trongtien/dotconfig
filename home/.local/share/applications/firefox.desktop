@@ -1,0 +1,28 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Firefox
+GenericName=Web Browser
+Comment=Trình duyệt web Firefox
+TryExec=/usr/bin/firefox
+Exec=/usr/lib/firefox/firefox %u
+Icon=firefox
+Terminal=false
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;x-scheme-handler/http;x-scheme-handler/https;
+Keywords=firefox;browser;web;internet;mozilla;trình duyệt;
+StartupNotify=true
+StartupWMClass=firefox
+Actions=new-window;new-private-window;profile-manager;
+
+[Desktop Action new-window]
+Name=Cửa sổ mới
+Exec=/usr/lib/firefox/firefox --new-window %u
+
+[Desktop Action new-private-window]
+Name=Cửa sổ riêng tư mới
+Exec=/usr/lib/firefox/firefox --private-window %u
+
+[Desktop Action profile-manager]
+Name=Quản lý profile
+Exec=/usr/lib/firefox/firefox --ProfileManager
