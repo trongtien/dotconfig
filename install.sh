@@ -26,6 +26,8 @@ PACMAN_PKGS=(
     ttf-jetbrains-mono-nerd
     # Âm thanh
     pipewire pipewire-audio pipewire-pulse wireplumber
+    # Mixer GUI (mục "Mixer" trong menu Sound, script ~/.local/scripts/sound)
+    pavucontrol
     # Mạng, độ sáng
     networkmanager network-manager-applet iwd brightnessctl
     # Chụp màn hình (script ~/.local/scripts/screenshot), thông báo

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Sound
+GenericName=Volume control
+Comment=Chỉnh âm lượng, tắt tiếng, chọn loa/mic (PipeWire)
+Exec=sh -c "\\$HOME/.local/scripts/sound"
+Icon=audio-volume-high
+Terminal=false
+Categories=AudioVideo;Audio;Mixer;
+Keywords=sound;volume;audio;mute;mic;speaker;am thanh;âm thanh;loa;

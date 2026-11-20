@@ -21,8 +21,8 @@ Repo này **chính là thư mục `~/.config`**. File `.gitignore` liệt kê đ
 ├── brave-flags.conf, mimeapps.list
 ├── home/                   # file nằm ngoài ~/.config → install.sh symlink về $HOME
 │   ├── .zshrc .zsh_profile .xprofile
-│   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot}
-│   └── .local/share/applications/{screenshot,tableplus,firefox}.desktop   # mục trong menu rofi
+│   ├── .local/scripts/{tmux-sessionizer,monitor-setup,screenshot,sound}
+│   └── .local/share/applications/{screenshot,sound,tableplus,firefox}.desktop   # mục trong menu rofi
 ├── etc/X11/xorg.conf.d/30-touchpad.conf   # → /etc (chạm để click)
 ├── etc/NetworkManager/conf.d/dns.conf     # → /etc (DNS 1.1.1.1/8.8.8.8, bỏ DNS nhà mạng)
 └── install.sh
@@ -212,7 +212,7 @@ Package được cài (sửa danh sách ở đầu `install.sh`, biến `PACMAN_
 | Neovim | `neovim tree-sitter-cli gcc make nodejs npm go` | Editor, build parser treesitter, Mason cài LSP |
 | Bun | `bun` | JS runtime + package manager; global bin ở `~/.bun/bin` (đã thêm vào PATH trong `personal/paths`) |
 | Font | `ttf-jetbrains-mono-nerd` | Font có icon cho kitty, i3, neo-tree |
-| Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber` | |
+| Âm thanh | `pipewire pipewire-audio pipewire-pulse wireplumber pavucontrol` | Script `sound` (menu rofi chỉnh âm lượng), `pavucontrol` là mixer GUI |
 | Mạng, độ sáng | `networkmanager network-manager-applet iwd brightnessctl` | Icon Wi-Fi trên thanh, phím độ sáng |
 | Chụp màn hình | `scrot libnotify` | Script `screenshot`, thông báo sau khi chụp |
 | Tiếng Việt | `fcitx5 fcitx5-configtool fcitx5-gtk fcitx5-qt fcitx5-bamboo` | |
@@ -239,6 +239,7 @@ Khi vào i3:
 - i3 tự chạy: `nm-applet`, `dunst`, `fcitx5`, `xss-lock`, script `monitor-setup`, và mở kitty ở workspace 1.
 - `monitor-setup`: có màn **HDMI-1** thì chỉ dùng màn ngoài 1920x1080, không có thì dùng màn laptop (độ sáng 100%). Bấm `Super+p` để chạy lại khi cắm/rút màn. Tên cổng khác thì sửa `INTERNAL`/`EXTERNAL` trong `home/.local/scripts/monitor-setup` (xem tên bằng `xrandr`).
 - `screenshot`: chụp bằng `scrot`, lưu `~/Pictures/Screenshots/<ngày_giờ>.png` và copy vào clipboard. Gọi không tham số → menu rofi; hoặc `screenshot region|full|window|delay`. Cũng có mục **Screenshot** trong `Super+r`.
+- `sound`: chỉnh âm thanh qua `wpctl` (PipeWire) bằng menu rofi: tăng/giảm 5% (menu mở lại để bấm tiếp, `Esc` thoát), đặt mức (gõ số, tối đa 150), tắt tiếng loa/mic, chọn loa/mic mặc định, mở `pavucontrol`. Hoặc `sound up|down|mute|mic`. Có mục **Sound** trong `Super+r` (gõ `sound`, `volume`, `âm thanh`, `loa`…).
 - `xset s off -dpms`: không tự làm tối/tắt màn hình khi để yên.
 - Shell: `~/.zshrc` → Oh My Zsh → `~/.zsh_profile` → `~/.config/personal/*` (alias, PATH), phím fzf, `Ctrl-f` mở tmux-sessionizer.
 

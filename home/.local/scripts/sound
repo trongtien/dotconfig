@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# Chỉnh âm thanh qua PipeWire (wpctl) bằng menu rofi.
+#   sound                 mở menu rofi (tăng/giảm, đặt mức, tắt tiếng, chọn loa/mic)
+#   sound up|down|mute|mic   chạy luôn một thao tác
+set -u
+
+SINK=@DEFAULT_AUDIO_SINK@
+SOURCE=@DEFAULT_AUDIO_SOURCE@
+STEP=5%
+
+# "40" hoặc "40 [MUTED]"
+level() {
+    wpctl get-volume "$1" | awk '{ printf "%d", $2 * 100 + 0.5; if ($3 == "[MUTED]") printf " [MUTED]" }'
+}
+
+notify() {
+    local v
+    v=$(level "$SINK")
+    notify-send -t 1500 -h string:x-dunst-stack-tag:sound -h "int:value:${v%% *}" \
+        -i audio-volume-high "Volume ${v}%" 2>/dev/null || true
+}
+
+# Liệt kê thiết bị của mục "Sinks:" / "Sources:" trong phần Audio của `wpctl status`.
+# Mỗi dòng: "<id>\t<* nếu mặc định>\t<tên>"
+devices() {
+    wpctl status | awk -v want="$1:" '
+        /^Video/ { exit }
+        $0 ~ want { on = 1; next }
+        on && /[├└]─/ { exit }
+        on {
+            line = $0
+            sub(/^[ │]*/, "", line)
+            def = (line ~ /^\*/) ? "*" : ""
+            sub(/^\* */, "", line)
+            if (!match(line, /^[0-9]+\./)) next
+            id = substr(line, 1, RLENGTH - 1)
+            name = substr(line, RLENGTH + 1)
+            sub(/^ +/, "", name); sub(/ *\[vol:.*$/, "", name)
+            printf "%s\t%s\t%s\n", id, def, name
+        }'
+}
+
+pick_device() {   # $1 = Sinks | Sources, $2 = tiêu đề rofi
+    local list choice
+    list=$(devices "$1")
+    [[ -z "$list" ]] && { notify-send "Sound" "Không tìm thấy thiết bị"; return; }
+    choice=$(awk -F'\t' '{ printf "%s %s. %s\n", ($2 == "*" ? "●" : "○"), $1, $3 }' <<<"$list" |
+        rofi -dmenu -i -p "$2") || return
+    wpctl set-default "$(awk '{ sub(/\.$/, "", $2); print $2 }' <<<"$choice")"
+}
+
+set_level() {
+    local choice
+    choice=$(printf '%s\n' 100 90 80 70 60 50 40 30 20 10 0 |
+        rofi -dmenu -i -p "Volume % (gõ số bất kỳ)") || return
+    [[ "$choice" =~ ^[0-9]+$ ]] || return
+    (( choice > 150 )) && choice=150
+    wpctl set-volume "$SINK" "$choice%"
+    wpctl set-mute "$SINK" 0
+}
+
+action() {
+    case "$1" in
+        up)   wpctl set-volume -l 1.5 "$SINK" "$STEP+"; wpctl set-mute "$SINK" 0 ;;
+        down) wpctl set-volume "$SINK" "$STEP-" ;;
+        mute) wpctl set-mute "$SINK" toggle ;;
+        mic)  wpctl set-mute "$SOURCE" toggle ;;
+        *) echo "Dùng: sound [up|down|mute|mic]" >&2; exit 1 ;;
+    esac
+}
+
+if [[ -n "${1:-}" ]]; then
+    action "$1"
+    notify
+    exit 0
+fi
+
+# Menu: sau khi tăng/giảm thì mở lại để bấm tiếp, Esc để thoát.
+while true; do
+    vol=$(level "$SINK")
+    mic=$(level "$SOURCE")
+    entries=(
+        "Volume +5%"
+        "Volume -5%"
+        "Set volume…"
+        "$([[ $vol == *MUTED* ]] && echo "Unmute speaker" || echo "Mute speaker")"
+        "$([[ $mic == *MUTED* ]] && echo "Unmute mic" || echo "Mute mic")"
+        "Output device…"
+        "Input device…"
+    )
+    command -v pavucontrol >/dev/null && entries+=("Mixer (pavucontrol)")
+
+    choice=$(printf '%s\n' "${entries[@]}" |
+        rofi -dmenu -i -p "Sound ${vol}% · Mic ${mic}%") || exit 0
+    case "$choice" in
+        "Volume +5%")       action up ;;
+        "Volume -5%")       action down ;;
+        "Set volume…")      set_level; notify; exit 0 ;;
+        *speaker)           action mute; notify; exit 0 ;;
+        *mic)               action mic; notify; exit 0 ;;
+        "Output device…")   pick_device Sinks "Output"; notify; exit 0 ;;
+        "Input device…")    pick_device Sources "Input"; exit 0 ;;
+        "Mixer (pavucontrol)") exec pavucontrol ;;
+        *) exit 0 ;;
+    esac
+done
